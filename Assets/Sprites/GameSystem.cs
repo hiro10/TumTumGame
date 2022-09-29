@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // ゲームを管理
 public class GameSystem : MonoBehaviour
@@ -14,12 +15,30 @@ public class GameSystem : MonoBehaviour
     //
     [SerializeField] List<Ball> removeBalls = new List<Ball>();
 
+    // 今選択しているボールを格納
+    Ball currentDraggingBall;
+
+    // スコア:TODO別クラスにしよう
+    int score;
+    [SerializeField] Text scoreText = default;
+
     /// <summary>
     /// 開始処理
     /// </summary>
     private void Start()
     {
-        StartCoroutine(ballGenerater.Spown(200));
+        score = 0;
+        AddScore(0);
+        scoreText.text = score.ToString();
+
+        StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
+    }
+
+    void AddScore(int point)
+    {
+        score += point;
+        scoreText.text = score.ToString();
+
     }
 
     /// <summary>
@@ -57,7 +76,6 @@ public class GameSystem : MonoBehaviour
         // ボールにヒットしたか
         if(hit&& hit.collider.GetComponent<Ball>())
         {
-            Debug.Log("オブジェクトにHitした");
             Ball ball = hit.collider.GetComponent<Ball>();
             AddRemoveBall(ball);
 
@@ -78,10 +96,20 @@ public class GameSystem : MonoBehaviour
         // ボールにヒットしたか
         if (hit && hit.collider.GetComponent<Ball>())
         {
-            Debug.Log("オブジェクトにHitした");
+            // 同じ種類、距離が近かったらリストに追加
+            // 何と同じだったら＝＞現在ドラックしているオブジェクト
             Ball ball = hit.collider.GetComponent<Ball>();
-            
-            AddRemoveBall(ball);
+
+            // 同じ種類だったら
+            if (ball.id == currentDraggingBall.id)
+            {
+                // 距離が近かったら
+                float distance = Vector2.Distance(ball.transform.position, currentDraggingBall.transform.position);
+                if (distance < ParamsSO.Entity.ballDistance)
+                {
+                    AddRemoveBall(ball);
+                }
+            }   
         }
     }
     /// <summary>
@@ -90,9 +118,17 @@ public class GameSystem : MonoBehaviour
     private void OnDragEnd()
     {
         int removeCount = removeBalls.Count;
-        for(int i = 0; i <removeCount;i++)
+
+        // つなげたツムが3個以上ならツムを消す
+        if (removeCount >= 3)
         {
-            Destroy(removeBalls[i].gameObject);
+            for (int i = 0; i < removeCount; i++)
+            {
+                Destroy(removeBalls[i].gameObject);
+            }
+            // 消えた数だけツムを追加する
+            StartCoroutine(ballGenerater.Spown(removeCount));
+            AddScore(removeCount *ParamsSO.Entity.ScorePint);
         }
         removeBalls.Clear();
         isDragging = false;
@@ -104,12 +140,12 @@ public class GameSystem : MonoBehaviour
     /// <param name="ball"></param>
     void AddRemoveBall(Ball ball)
     {
+        currentDraggingBall = ball;
         // リストがBallを持っていなかったら
         if(removeBalls.Contains(ball)==false)
         {
             // ballをリストに追加する
             removeBalls.Add(ball);
-        }
-        
+        } 
     }
 }
