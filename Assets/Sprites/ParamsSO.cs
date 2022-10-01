@@ -14,6 +14,10 @@ public class ParamsSO : ScriptableObject
     [Header("ボールの判定距離")]
     public float ballDistance;
 
+    [Header("ボムの爆破範囲")]
+    [Range(1,20)]
+    public float bomRange;
+
     //MyScriptableObjectが保存してある場所のパス
     public const string PATH = "ParamsSO";
 

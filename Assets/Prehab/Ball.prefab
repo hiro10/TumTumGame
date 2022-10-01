@@ -133,4 +133,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4afdbeba90ce6364e92011e6d757973c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  id: 0
+  explosonPrehab: {fileID: 5951620659722697464, guid: 064b9afb5f6e81b4b801d3daf60b3274,
+    type: 3}

@@ -12,7 +12,7 @@ public class GameSystem : MonoBehaviour
     // ドラッグ中かの判定
     bool isDragging;
 
-    //
+    // 取り除くボール
     [SerializeField] List<Ball> removeBalls = new List<Ball>();
 
     // 今選択しているボールを格納
@@ -77,9 +77,17 @@ public class GameSystem : MonoBehaviour
         if(hit&& hit.collider.GetComponent<Ball>())
         {
             Ball ball = hit.collider.GetComponent<Ball>();
-            AddRemoveBall(ball);
 
-            isDragging = true;
+            if(ball.isBomb())
+            {
+                Explosion(ball);
+            }
+            else
+            {
+                AddRemoveBall(ball);
+
+                isDragging = true;
+            }
         }
     }
     /// <summary>
@@ -124,12 +132,22 @@ public class GameSystem : MonoBehaviour
         {
             for (int i = 0; i < removeCount; i++)
             {
-                Destroy(removeBalls[i].gameObject);
+                removeBalls[i].Explosion();
+
             }
             // 消えた数だけツムを追加する
             StartCoroutine(ballGenerater.Spown(removeCount));
             AddScore(removeCount *ParamsSO.Entity.ScorePint);
         }
+        // すべての removeballを元に戻す
+        for (int i = 0; i< removeCount; i++)
+        {
+            // 大きさを戻す
+            removeBalls[i].transform.localScale = Vector3.one;
+            // 色を戻す
+            removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
         removeBalls.Clear();
         isDragging = false;
     }
@@ -144,8 +162,47 @@ public class GameSystem : MonoBehaviour
         // リストがBallを持っていなかったら
         if(removeBalls.Contains(ball)==false)
         {
+            // リストに加えた時にボールを大きくする
+            // TODO スクリプタブルオブジェクトにしよう大きさと色
+            ball.transform.localScale = Vector3.one * 1.4f;
+            // 色を変える
+            ball.GetComponent<SpriteRenderer>().color = Color.yellow;
+            
             // ballをリストに追加する
             removeBalls.Add(ball);
         } 
+    }
+
+    /// <summary>
+    /// ボムによる爆破
+    /// </summary>
+    void Explosion(Ball bom)
+    {
+        List<Ball> explosionList = new List<Ball>();
+
+        // ボムを中心に爆破するボールを集める
+        Collider2D[] hitObj = Physics2D.OverlapCircleAll(bom.transform.position, ParamsSO.Entity.bomRange);
+
+        for (int i = 0; i < hitObj.Length; i++)
+        {
+            // ボールだったら爆破
+            Ball ball = hitObj[i].GetComponent<Ball>();
+            if (ball)
+            {
+                explosionList.Add(ball);
+            }
+        }
+        // つなげたツムが3個以上ならツムを消す
+        int removeCount = explosionList.Count;
+
+        for (int i = 0; i < removeCount; i++)
+        {
+            explosionList[i].Explosion();
+
+        }
+        // 消えた数だけツムを追加する
+        StartCoroutine(ballGenerater.Spown(removeCount));
+        AddScore(removeCount * ParamsSO.Entity.ScorePint);
+
     }
 }
