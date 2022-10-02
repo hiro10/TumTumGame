@@ -18,6 +18,10 @@ public class ParamsSO : ScriptableObject
     [Range(1,20)]
     public float bomRange;
 
+    [Header("ボムのの出現率")]
+    [Range(0, 100)]
+    public float bomSpownRange;
+
     //MyScriptableObjectが保存してある場所のパス
     public const string PATH = "ParamsSO";
 

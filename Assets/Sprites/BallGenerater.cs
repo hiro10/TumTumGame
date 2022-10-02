@@ -32,7 +32,7 @@ public class BallGenerater : MonoBehaviour
             // ボールの種類だけランダムに(ボムの時はidをー１)
             int ballID = Random.Range(0, ballSprites.Length);
             // もしボムなら、idを-1それ以外なら今ままで道理
-            if (Random.Range(0, 100) < 20)
+            if (Random.Range(0, 100) < ParamsSO.Entity.bomSpownRange)
             {
                 ballID = -1;
                 ball.GetComponent<SpriteRenderer>().sprite = bombSprite;

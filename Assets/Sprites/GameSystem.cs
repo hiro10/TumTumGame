@@ -22,6 +22,9 @@ public class GameSystem : MonoBehaviour
     int score;
     [SerializeField] Text scoreText = default;
 
+    // ポイント生成用プレハブ
+    [SerializeField] GameObject pointEffectPrehab = default;
+
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -137,7 +140,14 @@ public class GameSystem : MonoBehaviour
             }
             // 消えた数だけツムを追加する
             StartCoroutine(ballGenerater.Spown(removeCount));
-            AddScore(removeCount *ParamsSO.Entity.ScorePint);
+
+            int score = removeCount * ParamsSO.Entity.ScorePint;
+
+            AddScore(score);
+            // ポイントの生成
+            PointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
+            
+            
         }
         // すべての removeballを元に戻す
         for (int i = 0; i< removeCount; i++)
@@ -202,7 +212,24 @@ public class GameSystem : MonoBehaviour
         }
         // 消えた数だけツムを追加する
         StartCoroutine(ballGenerater.Spown(removeCount));
-        AddScore(removeCount * ParamsSO.Entity.ScorePint);
 
+        int score = removeCount * ParamsSO.Entity.ScorePint;
+
+        AddScore(score);
+
+        // ポイントの生成
+        PointEffect(bom.transform.position, score);
+    }
+
+    /// <summary>
+    /// ポイントの生成
+    /// </summary>
+    /// <param name="position">出現する場所 </param>
+    /// <param name="score">表示するスコア</param>
+    void PointEffect(Vector2 position,int score)
+    {
+        GameObject effectobj = Instantiate(pointEffectPrehab, position, Quaternion.identity);
+        PointEffect pointEffect = effectobj.GetComponent<PointEffect>();
+        pointEffect.Show(score);
     }
 }
