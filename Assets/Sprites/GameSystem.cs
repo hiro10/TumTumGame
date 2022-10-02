@@ -25,6 +25,10 @@ public class GameSystem : MonoBehaviour
     // ポイント生成用プレハブ
     [SerializeField] GameObject pointEffectPrehab = default;
 
+    // 時間
+    [SerializeField] Text timerText;
+    int timeCount;
+
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -34,14 +38,32 @@ public class GameSystem : MonoBehaviour
         AddScore(0);
         scoreText.text = score.ToString();
 
+        timeCount = 60;
+
         StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
+        StartCoroutine(CountDown());
     }
+
+    /// <summary>
+    /// カウントダウン
+    /// </summary>
+    IEnumerator CountDown()
+    {
+        while (timeCount > 0)
+        {
+            yield return new WaitForSeconds(1);
+            timeCount--;
+            timerText.text = timeCount.ToString();
+        }
+
+    }
+
 
     void AddScore(int point)
     {
         score += point;
         scoreText.text = score.ToString();
-
+        timerText.text = timeCount.ToString();
     }
 
     /// <summary>
