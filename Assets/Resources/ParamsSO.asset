@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initBallCount: 40
   ScorePint: 50
-  ballDistance: 1.2
+  ballDistance: 1.5
   bomRange: 1.7
   bomSpownRange: 2
+  timeCount: 30

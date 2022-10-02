@@ -22,6 +22,9 @@ public class ParamsSO : ScriptableObject
     [Range(0, 100)]
     public float bomSpownRange;
 
+    [Header("ゲームの制限時間")]
+    public int timeCount;
+
     //MyScriptableObjectが保存してある場所のパス
     public const string PATH = "ParamsSO";
 

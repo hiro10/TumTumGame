@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 // ゲームを管理
 public class GameSystem : MonoBehaviour
@@ -29,6 +30,11 @@ public class GameSystem : MonoBehaviour
     [SerializeField] Text timerText;
     int timeCount;
 
+    // リザルト画面格納
+    [SerializeField] GameObject resultPanel;
+
+    bool gameOver;
+
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -38,10 +44,13 @@ public class GameSystem : MonoBehaviour
         AddScore(0);
         scoreText.text = score.ToString();
 
-        timeCount = 60;
+        timeCount = ParamsSO.Entity.timeCount;
 
         StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
         StartCoroutine(CountDown());
+
+        resultPanel.SetActive(false);
+        SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
     }
 
     /// <summary>
@@ -49,12 +58,16 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     IEnumerator CountDown()
     {
+        // 制限時間以内なら
         while (timeCount > 0)
         {
             yield return new WaitForSeconds(1);
             timeCount--;
             timerText.text = timeCount.ToString();
         }
+        gameOver = true;
+
+        resultPanel.SetActive(true);
 
     }
 
@@ -71,6 +84,10 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if(gameOver)
+        {
+            return;
+        }
         // 右クリックを押し込んだ時
         if (Input.GetMouseButtonDown(0))
         {
@@ -168,8 +185,9 @@ public class GameSystem : MonoBehaviour
             AddScore(score);
             // ポイントの生成
             PointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
-            
-            
+            // ツムの破裂SEの再生
+            SoundManager.instance.PlaySE(SoundManager.SE.Touch);
+
         }
         // すべての removeballを元に戻す
         for (int i = 0; i< removeCount; i++)
@@ -202,7 +220,11 @@ public class GameSystem : MonoBehaviour
             
             // ballをリストに追加する
             removeBalls.Add(ball);
-        } 
+
+            // タッチ音の再生
+            SoundManager.instance.PlaySE(SoundManager.SE.Destoy);
+
+        }
     }
 
     /// <summary>
@@ -241,6 +263,8 @@ public class GameSystem : MonoBehaviour
 
         // ポイントの生成
         PointEffect(bom.transform.position, score);
+
+       
     }
 
     /// <summary>
@@ -253,5 +277,11 @@ public class GameSystem : MonoBehaviour
         GameObject effectobj = Instantiate(pointEffectPrehab, position, Quaternion.identity);
         PointEffect pointEffect = effectobj.GetComponent<PointEffect>();
         pointEffect.Show(score);
+    }
+
+    public void OnRetryButton()
+    {
+        // 同じシーンを再読み込み
+        SceneManager.LoadScene("Main");
     }
 }
