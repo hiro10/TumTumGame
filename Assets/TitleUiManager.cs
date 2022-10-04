@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Title : MonoBehaviour
+public class TitleUiManager : MonoBehaviour
 {
     // 点滅スピード
     public float speed = 1.0f;
@@ -19,29 +18,20 @@ public class Title : MonoBehaviour
     [SerializeField] GameObject StartMenu;
 
     // オプションメニュー
-    [SerializeField] GameObject OptionMenu;
+    [SerializeField] GameObject Optionmenu;
 
-    /// <summary>
-    /// 開始処理
-    /// </summary>
-    private void Start()
+    void Start()
     {
-        OptionMenu.SetActive(false);
 
         StartMenu.SetActive(false);
-
-        SoundManager.instance.PlayBGM(SoundManager.BGM.Title);
     }
+        
 
     /// <summary>
     /// 更新処理
     /// </summary>
     void Update()
     {
-        if (Mathf.Approximately(Time.timeScale, 0f))
-        {
-            return;
-        }
 
         tapText.color = GetAlphaColor(tapText.color);
 
@@ -51,35 +41,6 @@ public class Title : MonoBehaviour
         }
 
     }
-
-    public void OnStartButton()
-    {
-        // Mainシーンに遷移
-        SceneManager.LoadScene("Main");
-    }
-
-    /// <summary>
-    /// オプションボタンの処理
-    /// </summary>
-    public void OnOppTionButton()
-    {
-        OptionMenu.SetActive(true);
-
-        if (Time.timeScale != 0)
-        {
-            Time.timeScale = 0;
-        }
-    }
-
-    public void OnCloseButton()
-    {
-        OptionMenu.SetActive(false);
-        if (Time.timeScale == 0)
-        {
-            Time.timeScale = 1;
-        }
-    }
-
 
     //Alpha値を更新してColorを返す
     Color GetAlphaColor(Color color)
@@ -99,5 +60,4 @@ public class Title : MonoBehaviour
 
         //FadeManager.Instance.LoadScene("Main", 1f);
     }
-
 }

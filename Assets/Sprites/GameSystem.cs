@@ -84,7 +84,12 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if(gameOver)
+        if (Mathf.Approximately(Time.timeScale, 0f))
+        {
+            return;
+        }
+
+        if (gameOver)
         {
             return;
         }
@@ -98,7 +103,7 @@ public class GameSystem : MonoBehaviour
         {
             OnDragEnd();
         }
-        else if(isDragging)
+        else if (isDragging)
         {
             OnDriging();
         }
@@ -113,14 +118,14 @@ public class GameSystem : MonoBehaviour
         // Rayで判定
         // カメラからスクリーンに向かって飛ばす
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition,Vector2.zero); 
+        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
         // ボールにヒットしたか
-        if(hit&& hit.collider.GetComponent<Ball>())
+        if (hit && hit.collider.GetComponent<Ball>())
         {
             Ball ball = hit.collider.GetComponent<Ball>();
 
-            if(ball.isBomb())
+            if (ball.isBomb())
             {
                 Explosion(ball);
             }
@@ -159,7 +164,7 @@ public class GameSystem : MonoBehaviour
                 {
                     AddRemoveBall(ball);
                 }
-            }   
+            }
         }
     }
     /// <summary>
@@ -184,13 +189,13 @@ public class GameSystem : MonoBehaviour
 
             AddScore(score);
             // ポイントの生成
-            PointEffect(removeBalls[removeBalls.Count-1].transform.position, score);
+            PointEffect(removeBalls[removeBalls.Count - 1].transform.position, score);
             // ツムの破裂SEの再生
             SoundManager.instance.PlaySE(SoundManager.SE.Touch);
 
         }
         // すべての removeballを元に戻す
-        for (int i = 0; i< removeCount; i++)
+        for (int i = 0; i < removeCount; i++)
         {
             // 大きさを戻す
             removeBalls[i].transform.localScale = Vector3.one;
@@ -210,14 +215,14 @@ public class GameSystem : MonoBehaviour
     {
         currentDraggingBall = ball;
         // リストがBallを持っていなかったら
-        if(removeBalls.Contains(ball)==false)
+        if (removeBalls.Contains(ball) == false)
         {
             // リストに加えた時にボールを大きくする
             // TODO スクリプタブルオブジェクトにしよう大きさと色
             ball.transform.localScale = Vector3.one * 1.4f;
             // 色を変える
             ball.GetComponent<SpriteRenderer>().color = Color.yellow;
-            
+
             // ballをリストに追加する
             removeBalls.Add(ball);
 
@@ -264,7 +269,7 @@ public class GameSystem : MonoBehaviour
         // ポイントの生成
         PointEffect(bom.transform.position, score);
 
-       
+
     }
 
     /// <summary>
@@ -272,16 +277,34 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     /// <param name="position">出現する場所 </param>
     /// <param name="score">表示するスコア</param>
-    void PointEffect(Vector2 position,int score)
+    void PointEffect(Vector2 position, int score)
     {
         GameObject effectobj = Instantiate(pointEffectPrehab, position, Quaternion.identity);
         PointEffect pointEffect = effectobj.GetComponent<PointEffect>();
         pointEffect.Show(score);
     }
 
+    /// <summary>
+    /// リトライボタンの処理
+    /// </summary>
     public void OnRetryButton()
     {
         // 同じシーンを再読み込み
         SceneManager.LoadScene("Main");
+    }
+
+    /// <summary>
+    /// オプションボタンの処理
+    /// </summary>
+    public void OnOppTionButton()
+    {
+        if (Time.timeScale != 0)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
     }
 }
