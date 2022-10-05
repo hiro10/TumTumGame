@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class SoundManager : MonoBehaviour
     //SE
     [SerializeField] AudioSource audioSourceSE;
     [SerializeField] AudioClip[] audioClipsSE;
+
+    private const float BGM_VOLUME_DEFULT = 1.0f;
+    private const float SE_VOLUME_DEFULT = 1.0f;
 
     /// <summary>
     /// BGMの列挙型
@@ -45,7 +50,7 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -54,6 +59,14 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+    }
+
+    private void Start()
+    {
+        // 音量データの読み込み（からの場合は１を入れる）
+       audioSourceBGM.volume = PlayerPrefs.GetFloat("BGM_VOLUME", BGM_VOLUME_DEFULT);
+       audioSourceSE.volume = PlayerPrefs.GetFloat("SE_VOLUME", SE_VOLUME_DEFULT);
     }
 
     /// <summary>
@@ -72,8 +85,33 @@ public class SoundManager : MonoBehaviour
     /// <param name="se"></param>
     public void PlaySE(SE se)
     {
-        audioSourceSE.clip = audioClipsSE[(int)se];
-        audioSourceSE.Play();
+        audioSourceSE.PlayOneShot(audioClipsSE[(int)se]);
+        
     }
 
+    /// <summary>
+    /// BGMの音量変更
+    /// </summary>
+    /// <param name="BGMVolume"> スライダーのボリューム </param>
+    public void ChangeVolumeBGM(float BGMVolume)
+    {
+        audioSourceBGM.volume = BGMVolume;
+        
+        // 音量の保存
+        PlayerPrefs.SetFloat("BGM_VOLUME", audioSourceBGM.volume);
+       
+    }
+
+    /// <summary>
+    /// SEの音量変更
+    /// </summary>
+    /// <param name="SEVolume"> スライダーのボリューム </param>
+    public void ChangeVolumeSE(float SEVolume)
+    {
+        audioSourceSE.volume = SEVolume;
+
+        // 音量の保存
+        PlayerPrefs.SetFloat("SE_VOLUME", audioSourceSE.volume);
+
+    }
 }

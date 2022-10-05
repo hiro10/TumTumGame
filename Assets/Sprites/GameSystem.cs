@@ -294,6 +294,15 @@ public class GameSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// タイトルボタンの処理
+    /// </summary>
+    public void OnTitleButton()
+    {
+        // 同じシーンを再読み込み
+        SceneManager.LoadScene("Title");
+    }
+
+    /// <summary>
     /// オプションボタンの処理
     /// </summary>
     public void OnOppTionButton()

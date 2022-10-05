@@ -21,6 +21,7 @@ public class Title : MonoBehaviour
     // オプションメニュー
     [SerializeField] GameObject OptionMenu;
 
+    [SerializeField] Button[] MenmuButton = new Button[3];
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -68,6 +69,11 @@ public class Title : MonoBehaviour
         if (Time.timeScale != 0)
         {
             Time.timeScale = 0;
+
+            for (int i = 0; i < MenmuButton.Length; i++)
+            {
+                MenmuButton[i].interactable=false;
+            }
         }
     }
 
@@ -77,6 +83,11 @@ public class Title : MonoBehaviour
         if (Time.timeScale == 0)
         {
             Time.timeScale = 1;
+
+            for (int i = 0; i < MenmuButton.Length; i++)
+            {
+                MenmuButton[i].interactable = true;
+            }
         }
     }
 
