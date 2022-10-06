@@ -37,6 +37,8 @@ public class GameSystem : MonoBehaviour
 
     bool gameOver;
 
+    [SerializeField] Image coundDownicon;
+
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -54,6 +56,7 @@ public class GameSystem : MonoBehaviour
         resultPanel.SetActive(false);
         SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
         cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+        coundDownicon = GameObject.Find("Image").GetComponent<Image>();
     }
 
     /// <summary>
@@ -67,7 +70,9 @@ public class GameSystem : MonoBehaviour
             yield return new WaitForSeconds(1);
             timeCount--;
             timerText.text = timeCount.ToString();
+            coundDownicon.fillAmount = (float)timeCount / (float)ParamsSO.Entity.timeCount;
         }
+       
         gameOver = true;
 
         resultPanel.SetActive(true);
