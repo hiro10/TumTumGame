@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Title : MonoBehaviour
 {
@@ -18,20 +19,34 @@ public class Title : MonoBehaviour
     // 点滅解除後に表示させるUI
     [SerializeField] GameObject StartMenu;
 
-    // オプションメニュー
-    [SerializeField] GameObject OptionMenu;
-
     [SerializeField] Button[] MenmuButton = new Button[3];
+
+    // オプション画面用(DoTween)
+    public GameObject optionPanel;
+    private bool isDefaultScaleoptionPanel;
+
+    // タイトル用(DoTween)
+    public GameObject title;
+    private bool isDefaultScaleTitle;
+
     /// <summary>
     /// 開始処理
     /// </summary>
     private void Start()
-    {
-        OptionMenu.SetActive(false);
-
+    { 
         StartMenu.SetActive(false);
 
+        // dotweenの判定トリガーをfalseに
+        isDefaultScaleoptionPanel = false;
+
+        // タイトルBGMの再生
         SoundManager.instance.PlayBGM(SoundManager.BGM.Title);
+
+        // オプションウィンドウのnullチェック
+        if (optionPanel == null)
+        {
+            optionPanel = GameObject.Find("OptionWindow");
+        }
     }
 
     /// <summary>
@@ -64,30 +79,38 @@ public class Title : MonoBehaviour
     /// </summary>
     public void OnOppTionButton()
     {
-        OptionMenu.SetActive(true);
 
-        if (Time.timeScale != 0)
+        if (!isDefaultScaleoptionPanel)
         {
-            Time.timeScale = 0;
+            // オプションウィンドウをだんだん拡大
+            optionPanel.transform.DOScale(new Vector3(1, 1, 1), 0.2f);
+            
+            isDefaultScaleoptionPanel = true;
+        }
 
-            for (int i = 0; i < MenmuButton.Length; i++)
-            {
-                MenmuButton[i].interactable=false;
-            }
+        // それ以外のボタンを押せないように
+        for (int i = 0; i < MenmuButton.Length; i++)
+        {
+            MenmuButton[i].interactable = false;
         }
     }
 
+    /// <summary>
+    /// オプション画面の閉じるボタンを押したとき
+    /// </summary>
     public void OnCloseButton()
     {
-        OptionMenu.SetActive(false);
-        if (Time.timeScale == 0)
+        if (isDefaultScaleoptionPanel)
         {
-            Time.timeScale = 1;
+            // オプションウィンドウをだんだん縮小
+            optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f);
+            isDefaultScaleoptionPanel = false;
+        }
 
-            for (int i = 0; i < MenmuButton.Length; i++)
-            {
-                MenmuButton[i].interactable = true;
-            }
+        // 押せなかったボタンを押せるように
+        for (int i = 0; i < MenmuButton.Length; i++)
+        {
+            MenmuButton[i].interactable = true;
         }
     }
 

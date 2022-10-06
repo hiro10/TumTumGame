@@ -210,7 +210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &45599052
 RectTransform:
   m_ObjectHideFlags: 0
@@ -469,11 +469,12 @@ MonoBehaviour:
   speed: 1
   tapText: {fileID: 371802658}
   StartMenu: {fileID: 45599051}
-  OptionMenu: {fileID: 636418619}
   MenmuButton:
   - {fileID: 2020932108}
   - {fileID: 230708099}
   - {fileID: 705638011}
+  optionPanel: {fileID: 636418619}
+  title: {fileID: 0}
 --- !u!4 &255928497
 Transform:
   m_ObjectHideFlags: 0
@@ -1146,7 +1147,7 @@ RectTransform:
   m_GameObject: {fileID: 636418619}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 398403840}
   - {fileID: 1180446069}
@@ -1948,9 +1949,6 @@ MonoBehaviour:
   audioClipsSE:
   - {fileID: 8300000, guid: b2fa09c76e0c543cfa8396563aa40ea2, type: 3}
   - {fileID: 8300000, guid: 39ce96116a2a94f2a8bb055e54e65eb5, type: 3}
-  bgmSlider: {fileID: 0}
-  seSlider: {fileID: 0}
-  slider: {fileID: 0}
 --- !u!4 &1491756417
 Transform:
   m_ObjectHideFlags: 0

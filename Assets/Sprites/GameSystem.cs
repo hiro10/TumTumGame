@@ -33,6 +33,8 @@ public class GameSystem : MonoBehaviour
     // リザルト画面格納
     [SerializeField] GameObject resultPanel;
 
+    [SerializeField] CameraShake cameraShake;
+
     bool gameOver;
 
     /// <summary>
@@ -51,6 +53,7 @@ public class GameSystem : MonoBehaviour
 
         resultPanel.SetActive(false);
         SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
+        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
     }
 
     /// <summary>
@@ -128,6 +131,7 @@ public class GameSystem : MonoBehaviour
             if (ball.isBomb())
             {
                 Explosion(ball);
+                StartCoroutine(CameraShake());
             }
             else
             {
@@ -315,5 +319,18 @@ public class GameSystem : MonoBehaviour
         {
             Time.timeScale = 1;
         }
+    }
+
+    /// <summary>
+    /// カメラを揺らす
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator CameraShake()
+    {
+        // カメラを揺らす
+        cameraShake.Shake(0.25f, 0.1f);
+
+        yield return new WaitForSeconds(2.0f);
+
     }
 }
