@@ -20,8 +20,13 @@ public class GameSystem : MonoBehaviour
     Ball currentDraggingBall;
 
     // スコア:TODO別クラスにしよう
+    // 現在のスコア
     int score;
+    // ハイスコア
+    int highScore;
     [SerializeField] Text scoreText = default;
+    [SerializeField] Text higtscoreText = default;
+    [SerializeField] Text resultscoreText = default;
 
     // ポイント生成用プレハブ
     [SerializeField] GameObject pointEffectPrehab = default;
@@ -45,8 +50,10 @@ public class GameSystem : MonoBehaviour
     private void Start()
     {
         score = 0;
+        highScore = PlayerPrefs.GetInt("SCORE", 0);
         AddScore(0);
         scoreText.text = score.ToString();
+        higtscoreText.text = highScore.ToString();
 
         timeCount = ParamsSO.Entity.timeCount;
 
@@ -74,7 +81,7 @@ public class GameSystem : MonoBehaviour
         }
        
         gameOver = true;
-
+        ChangeHightScore();
         resultPanel.SetActive(true);
 
     }
@@ -92,6 +99,7 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void Update()
     {
+       
         if (Mathf.Approximately(Time.timeScale, 0f))
         {
             return;
@@ -207,7 +215,7 @@ public class GameSystem : MonoBehaviour
         for (int i = 0; i < removeCount; i++)
         {
             // 大きさを戻す
-            removeBalls[i].transform.localScale = Vector3.one;
+            removeBalls[i].transform.localScale = new Vector3(1.2f,1.2f,1);
             // 色を戻す
             removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
         }
@@ -230,7 +238,7 @@ public class GameSystem : MonoBehaviour
             // TODO スクリプタブルオブジェクトにしよう大きさと色
             ball.transform.localScale = Vector3.one * 1.4f;
             // 色を変える
-            ball.GetComponent<SpriteRenderer>().color = Color.yellow;
+            ball.GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f,0.4f);
 
             // ballをリストに追加する
             removeBalls.Add(ball);
@@ -337,5 +345,19 @@ public class GameSystem : MonoBehaviour
 
         yield return new WaitForSeconds(2.0f);
 
+    }
+
+    /// <summary>
+    /// スコアがハイスコアを上回っていた時のスコア更新処理
+    /// </summary>
+    public void ChangeHightScore()
+    {
+        resultscoreText.text = score.ToString();
+        if(highScore<score)
+        {
+            highScore = score;
+            PlayerPrefs.SetInt("SCORE", highScore);
+            PlayerPrefs.Save();
+        }
     }
 }
