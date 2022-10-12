@@ -83,7 +83,10 @@ public class GameSystem : MonoBehaviour
         gameOver = true;
         ChangeHightScore();
         resultPanel.SetActive(true);
-
+        //if (highScore < score)
+        {
+            naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
+        }
     }
 
 

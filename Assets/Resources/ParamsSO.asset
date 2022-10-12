@@ -15,6 +15,6 @@ MonoBehaviour:
   initBallCount: 40
   ScorePint: 50
   ballDistance: 1.5
-  bomRange: 1.7
+  bomRange: 18.8
   bomSpownRange: 2
-  timeCount: 10
+  timeCount: 30

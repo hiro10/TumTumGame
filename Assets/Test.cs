@@ -6,22 +6,34 @@ using TMPro;
 
 public class Test : MonoBehaviour
 {
-    TextMeshProUGUI tmpro;
+    // === 外部パラメーター（インスペクター表示）=============================
 
-    DOTweenTMPAnimator tmproAnimator; 
-    // Start is called before the first frame update
-    void Start()
+    public Transform moneyTextPos;      //「5000兆円」テキストのtransform
+    public Transform hoshiiTextPos;     //「欲しい！」テキストのtransform
+
+    public float shakePower;            // 揺らす強さ
+
+
+    // === 内部パラメーター ==================================================
+
+    Vector3 moneyTextInitPos;           // 開始時の位置
+    Vector3 hoshiiTextInitPos;
+
+
+    // === コード（MonoBehaviour基本機能の実装）==============================
+
+    private void Start()
     {
-        tmpro = GetComponent<TextMeshProUGUI>();
-        tmproAnimator = new DOTweenTMPAnimator(tmpro);
+        // 開始時の位置を取得
+        moneyTextInitPos = moneyTextPos.position;
+        hoshiiTextInitPos = hoshiiTextPos.position;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
-        for (int i = 0; i < tmproAnimator.textInfo.characterCount; ++i)
-        {
-            tmproAnimator.DOShakeCharOffset(i, 3f, 50f, 3, fadeOut: false).SetLoops(-1);
-        }
+        // ランダムに揺らす
+        moneyTextPos.position = moneyTextInitPos + Random.insideUnitSphere * shakePower;
+        hoshiiTextPos.position = hoshiiTextInitPos + Random.insideUnitSphere * shakePower;
     }
 }

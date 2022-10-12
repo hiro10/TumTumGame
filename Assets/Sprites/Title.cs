@@ -114,6 +114,14 @@ public class Title : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// オプション画面のスコアボタンを押したとき
+    /// </summary>
+    public void OnScoreButton()
+    {
+        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(100);
+    }
+
 
     //Alpha値を更新してColorを返す
     Color GetAlphaColor(Color color)
