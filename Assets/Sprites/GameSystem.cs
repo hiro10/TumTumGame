@@ -50,7 +50,7 @@ public class GameSystem : MonoBehaviour
     private void Start()
     {
         score = 0;
-        highScore = PlayerPrefs.GetInt("SCORE", 0);
+        highScore = 0; //PlayerPrefs.GetInt("SCORE", 0);
         AddScore(0);
         scoreText.text = score.ToString();
         higtscoreText.text = highScore.ToString();
@@ -81,15 +81,25 @@ public class GameSystem : MonoBehaviour
         }
        
         gameOver = true;
-        ChangeHightScore();
-        resultPanel.SetActive(true);
-        //if (highScore < score)
+
+        // 現在スコアがハイスコアを超えていたら
+        if (highScore < score)
         {
+            // オンラインランキングに登録する
             naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
         }
+
+        // ゲーム内のスコアの更新
+        ChangeHightScore();
+
+        // リザルト画面を表示
+        resultPanel.SetActive(true);
     }
 
-
+    /// <summary>
+    /// スコアを加える処理
+    /// </summary>
+    /// <param name="point"></param>
     void AddScore(int point)
     {
         score += point;
