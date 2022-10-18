@@ -82,13 +82,6 @@ public class GameSystem : MonoBehaviour
        
         gameOver = true;
 
-        // 現在スコアがハイスコアを超えていたら
-        if (highScore < score)
-        {
-            // オンラインランキングに登録する
-            naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
-        }
-
         // ゲーム内のスコアの更新
         ChangeHightScore();
 
@@ -97,7 +90,7 @@ public class GameSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// スコアを加える処理
+    /// スコアを加える処理trititttttt
     /// </summary>
     /// <param name="point"></param>
     void AddScore(int point)
@@ -335,15 +328,13 @@ public class GameSystem : MonoBehaviour
     /// <summary>
     /// オプションボタンの処理
     /// </summary>
-    public void OnOppTionButton()
+    public void OnRankingButton()
     {
-        if (Time.timeScale != 0)
+        // 現在スコアがハイスコアを超えていたら
+        //if (highScore < score)
         {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
+            // オンラインランキングに登録する
+            naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
         }
     }
 
@@ -357,7 +348,6 @@ public class GameSystem : MonoBehaviour
         cameraShake.Shake(0.25f, 0.1f);
 
         yield return new WaitForSeconds(2.0f);
-
     }
 
     /// <summary>

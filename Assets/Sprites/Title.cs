@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class Title : MonoBehaviour
 {
@@ -26,14 +27,15 @@ public class Title : MonoBehaviour
     private bool isDefaultScaleoptionPanel;
 
     // タイトル用(DoTween)
-    public GameObject title;
-    private bool isDefaultScaleTitle;
+    public TextMeshProUGUI title;
+    [SerializeField]
+    private Text _text = default;
 
     /// <summary>
     /// 開始処理
     /// </summary>
     private void Start()
-    { 
+    {
         StartMenu.SetActive(false);
 
         // dotweenの判定トリガーをfalseに
@@ -47,6 +49,7 @@ public class Title : MonoBehaviour
         {
             optionPanel = GameObject.Find("OptionWindow");
         }
+      
     }
 
     /// <summary>
@@ -65,13 +68,49 @@ public class Title : MonoBehaviour
         {
             StartCoroutine(TapText());
         }
-
     }
 
+    /// <summary>
+    /// スタートボタンを押したときの処理
+    /// </summary>
     public void OnStartButton()
     {
         // Mainシーンに遷移
         SceneManager.LoadScene("Main");
+    }
+
+    /// <summary>
+    /// タイトルをタップしたときの処理
+    /// </summary>
+    public void OnTestButton()
+    {
+        //DOTweenTMPAnimatorを作成
+        DOTweenTMPAnimator animator = new DOTweenTMPAnimator(title);
+
+        //1文字ずつアニメーションを設定(iが何番目の文字かのインデックス)
+        //Sequenceで全文字のアニメーションをまとめる
+        var sequence = DOTween.Sequence();
+
+
+        //一文字ずつにアニメーション設定
+        var duration = 0.2f;//1回辺りのTween時間
+        for (int i = 0; i < animator.textInfo.characterCount; ++i)
+        {
+            sequence.Join(DOTween.Sequence()
+              //上に移動して戻る
+              .Append(animator.DOOffsetChar(i, animator.GetCharOffset(i) + new Vector3(0, 30, 0), duration).SetEase(Ease.OutFlash, 2))
+              //同時に1.2倍に拡大して戻る
+              .Join(animator.DOScaleChar(i, 1.2f, duration).SetEase(Ease.OutFlash, 2))
+              //同時に360度回転
+              .Join(animator.DORotateChar(i, Vector3.forward * -360, duration, RotateMode.FastBeyond360).SetEase(Ease.OutFlash))
+              //同時に色を黄色にして戻す
+              .Join(animator.DOColorChar(i, Color.yellow, duration * 0.5f).SetLoops(2, LoopType.Yoyo))
+              //アニメーション後、1秒のインターバル設定
+              .AppendInterval(1f)
+              //開始は0.15秒ずつずらす
+              .SetDelay(0.15f * i)
+            );
+        }
     }
 
     /// <summary>
