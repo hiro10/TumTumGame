@@ -75,6 +75,9 @@ public class Title : MonoBehaviour
     /// </summary>
     public void OnStartButton()
     {
+        // 決定音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
+
         // Mainシーンに遷移
         SceneManager.LoadScene("Main");
     }
@@ -118,6 +121,8 @@ public class Title : MonoBehaviour
     /// </summary>
     public void OnOppTionButton()
     {
+        // 決定音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
 
         if (!isDefaultScaleoptionPanel)
         {
@@ -139,6 +144,9 @@ public class Title : MonoBehaviour
     /// </summary>
     public void OnCloseButton()
     {
+        // 閉じる音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Close);
+
         if (isDefaultScaleoptionPanel)
         {
             // オプションウィンドウをだんだん縮小
@@ -158,6 +166,8 @@ public class Title : MonoBehaviour
     /// </summary>
     public void OnScoreButton()
     {
+        // 決定音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         naichilab.RankingLoader.Instance.SendScoreAndShowRanking(100);
     }
 

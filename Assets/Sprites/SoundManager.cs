@@ -37,7 +37,9 @@ public class SoundManager : MonoBehaviour
     {
         Destoy, // ボールが破裂するとき
         Touch,   // ボールに触れた時
-        Explosion // 爆弾が爆発するとき
+        Explosion, // 爆弾が爆発するとき
+        Decision, // ボタンの決定音
+        Close, // ボタンの閉じる音
 
     }
 

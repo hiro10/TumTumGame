@@ -264,7 +264,8 @@ public class GameSystem : MonoBehaviour
 
         // ボムを中心に爆破するボールを集める
         Collider2D[] hitObj = Physics2D.OverlapCircleAll(bom.transform.position, ParamsSO.Entity.bomRange);
-
+        // 爆発音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Explosion);
         for (int i = 0; i < hitObj.Length; i++)
         {
             // ボールだったら爆破
@@ -274,6 +275,7 @@ public class GameSystem : MonoBehaviour
                 explosionList.Add(ball);
             }
         }
+
         // つなげたツムが3個以上ならツムを消す
         int removeCount = explosionList.Count;
 
@@ -312,6 +314,8 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     public void OnRetryButton()
     {
+        // 決定音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         // 同じシーンを再読み込み
         SceneManager.LoadScene("Main");
     }
@@ -321,21 +325,22 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     public void OnTitleButton()
     {
+        // 決定音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         // 同じシーンを再読み込み
         SceneManager.LoadScene("Title");
     }
 
     /// <summary>
-    /// オプションボタンの処理
+    /// ランキングボタンの処理
     /// </summary>
     public void OnRankingButton()
     {
-        // 現在スコアがハイスコアを超えていたら
-        //if (highScore < score)
-        {
-            // オンラインランキングに登録する
-            naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
-        }
+        // 決定音の再生
+        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
+        // オンラインランキングに登録する
+        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
+        
     }
 
     /// <summary>

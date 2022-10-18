@@ -2104,11 +2104,14 @@ MonoBehaviour:
   audioSourceBGM: {fileID: 1491756415}
   audioClipsBGM:
   - {fileID: 8300000, guid: 315edc9603fca47d7a3d1eb3ab2e4bf9, type: 3}
-  - {fileID: 8300000, guid: 2e2362e5b924846508be96e892db67b3, type: 3}
+  - {fileID: 8300000, guid: ad0e4aa4c36049e4a92b715a86ecefa9, type: 3}
   audioSourceSE: {fileID: 1491756418}
   audioClipsSE:
   - {fileID: 8300000, guid: b2fa09c76e0c543cfa8396563aa40ea2, type: 3}
   - {fileID: 8300000, guid: 39ce96116a2a94f2a8bb055e54e65eb5, type: 3}
+  - {fileID: 8300000, guid: d5c21b15515c8f24185491f238111d04, type: 3}
+  - {fileID: 8300000, guid: e02467e9ff6bdb1449b360fc0edea74a, type: 3}
+  - {fileID: 8300000, guid: 491e06a58c3d45b4fa4234b65a7473c7, type: 3}
 --- !u!4 &1491756417
 Transform:
   m_ObjectHideFlags: 0

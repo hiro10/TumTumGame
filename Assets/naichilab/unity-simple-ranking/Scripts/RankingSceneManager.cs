@@ -236,6 +236,8 @@ namespace naichilab
 
         public void OnCloseButtonClick()
         {
+            // 決定音の再生
+            SoundManager.instance.PlaySE(SoundManager.SE.Close);
             closeButton.interactable = false;
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("Ranking");
         }
