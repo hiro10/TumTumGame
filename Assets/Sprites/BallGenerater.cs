@@ -16,6 +16,8 @@ public class BallGenerater : MonoBehaviour
     // ボム
     [SerializeField] Sprite bombSprite = default;
 
+    public Material materials;
+
     /// <summary>
     /// ツムの生成
     /// </summary>
@@ -35,6 +37,7 @@ public class BallGenerater : MonoBehaviour
             if (Random.Range(0, 100) < ParamsSO.Entity.bomSpownRange)
             {
                 ballID = -1;
+                ball.GetComponent<Renderer>().material = materials;
                 ball.GetComponent<SpriteRenderer>().sprite = bombSprite;
             }
             else
