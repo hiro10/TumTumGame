@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using System;
 
 public class Title : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Title : MonoBehaviour
     public float speed = 1.0f;
 
     // 点滅させたいUI格納
-    [SerializeField] private Text tapText;
+    [SerializeField] private TextMeshProUGUI tapText;
 
     // 点滅頻度
     private float time;
@@ -28,14 +29,22 @@ public class Title : MonoBehaviour
 
     // タイトル用(DoTween)
     public TextMeshProUGUI title;
-    [SerializeField]
-    private Text _text = default;
+
+    // 背景用
+    [SerializeField] GameObject[] backGround;
+
+    [SerializeField] Fade fade;
+
 
     /// <summary>
     /// 開始処理
     /// </summary>
     private void Start()
     {
+        fade.FadeOut(1f);
+
+        ChangeBackGround();
+
         StartMenu.SetActive(false);
 
         // dotweenの判定トリガーをfalseに
@@ -48,8 +57,7 @@ public class Title : MonoBehaviour
         if (optionPanel == null)
         {
             optionPanel = GameObject.Find("OptionWindow");
-        }
-      
+        }      
     }
 
     /// <summary>
@@ -79,7 +87,7 @@ public class Title : MonoBehaviour
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
 
         // Mainシーンに遷移
-        SceneManager.LoadScene("Main");
+        fade.FadeIn(1f, () => SceneManager.LoadScene("Main"));
     }
 
     /// <summary>
@@ -191,4 +199,30 @@ public class Title : MonoBehaviour
         //FadeManager.Instance.LoadScene("Main", 1f);
     }
 
+    /// <summary>
+    /// 時間帯によって背景を変える処理
+    /// </summary>
+    private void ChangeBackGround()
+    {
+        // 夜
+        if (DateTime.Now.Hour >= 19 || DateTime.Now.Hour <= 6)
+        {
+            backGround[0].SetActive(true);
+        }
+        // 夕方,早朝
+        else if (DateTime.Now.Hour == 7 || DateTime.Now.Hour == 18)
+        {
+            backGround[1].SetActive(true);
+        }
+        // 朝、昼
+        else
+        {
+            backGround[2].SetActive(true);
+        }
+    }
+
+    void OnActiveSceneChanged()
+    {
+        
+    }
 }

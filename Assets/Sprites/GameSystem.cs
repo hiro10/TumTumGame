@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
+using DG.Tweening;
+using System;
 
 // ゲームを管理
 public class GameSystem : MonoBehaviour
@@ -24,15 +27,16 @@ public class GameSystem : MonoBehaviour
     int score;
     // ハイスコア
     int highScore;
+   
     [SerializeField] Text scoreText = default;
     [SerializeField] Text higtscoreText = default;
-    [SerializeField] Text resultscoreText = default;
+    [SerializeField] TextMeshProUGUI resultscoreText = default;
 
     // ポイント生成用プレハブ
     [SerializeField] GameObject pointEffectPrehab = default;
 
     // 時間
-    [SerializeField] Text timerText;
+    [SerializeField] TextMeshProUGUI timerText;
     int timeCount;
 
     // リザルト画面格納
@@ -44,26 +48,50 @@ public class GameSystem : MonoBehaviour
 
     [SerializeField] Image coundDownicon;
 
+    // 背景用
+    [SerializeField] GameObject[] backGround;
+
+    DateTime awakeDateTime = DateTime.Now;
+
+    // フェード演出用
+    [SerializeField] Fade fade;
+
+
     /// <summary>
     /// 開始処理
     /// </summary>
     private void Start()
     {
+        StartCoroutine(StartGame());
+    }
+
+    IEnumerator StartGame()
+    {
+        fade.FadeOut(1f);
         score = 0;
-        highScore = 0; //PlayerPrefs.GetInt("SCORE", 0);
-        AddScore(0);
+        PlayerPrefs.GetInt("SCORE", highScore);
+
         scoreText.text = score.ToString();
         higtscoreText.text = highScore.ToString();
 
         timeCount = ParamsSO.Entity.timeCount;
 
-        StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
-        StartCoroutine(CountDown());
-
+        // リザルトパネルは表示しない
         resultPanel.SetActive(false);
+
+        // メインBGMを流す
         SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
         cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
         coundDownicon = GameObject.Find("Image").GetComponent<Image>();
+
+        ChangeBackGround();
+
+        // 3秒間待つ
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
+        StartCoroutine(CountDown());
+
+       
     }
 
     /// <summary>
@@ -77,20 +105,26 @@ public class GameSystem : MonoBehaviour
             yield return new WaitForSeconds(1);
             timeCount--;
             timerText.text = timeCount.ToString();
-            coundDownicon.fillAmount = (float)timeCount / (float)ParamsSO.Entity.timeCount;
+            coundDownicon.fillAmount = -(float)timeCount / (float)ParamsSO.Entity.timeCount;
         }
        
         gameOver = true;
+
+        // ゲーム終了時に得点になるツムをつかんでいたら消して得点にする
+        OnDragEnd();
 
         // ゲーム内のスコアの更新
         ChangeHightScore();
 
         // リザルト画面を表示
         resultPanel.SetActive(true);
+       
+        ScoreUiEffect();
+        
     }
 
     /// <summary>
-    /// スコアを加える処理trititttttt
+    /// スコアを加える処理
     /// </summary>
     /// <param name="point"></param>
     void AddScore(int point)
@@ -105,7 +139,6 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void Update()
     {
-       
         if (Mathf.Approximately(Time.timeScale, 0f))
         {
             return;
@@ -221,7 +254,7 @@ public class GameSystem : MonoBehaviour
         for (int i = 0; i < removeCount; i++)
         {
             // 大きさを戻す
-            removeBalls[i].transform.localScale = new Vector3(1.2f,1.2f,1);
+            removeBalls[i].transform.localScale = new Vector3(1.0f,1.0f,1.0f);
             // 色を戻す
             removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
         }
@@ -270,10 +303,12 @@ public class GameSystem : MonoBehaviour
         {
             // ボールだったら爆破
             Ball ball = hitObj[i].GetComponent<Ball>();
+
             if (ball)
             {
                 explosionList.Add(ball);
             }
+           
         }
 
         // つなげたツムが3個以上ならツムを消す
@@ -293,8 +328,6 @@ public class GameSystem : MonoBehaviour
 
         // ポイントの生成
         PointEffect(bom.transform.position, score);
-
-
     }
 
     /// <summary>
@@ -316,8 +349,8 @@ public class GameSystem : MonoBehaviour
     {
         // 決定音の再生
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
-        // 同じシーンを再読み込み
-        SceneManager.LoadScene("Main");
+        // 同じシーンを再読み込み(1秒間フェード処理)
+        fade.FadeIn(1f,()=> SceneManager.LoadScene("Main"));
     }
 
     /// <summary>
@@ -328,7 +361,7 @@ public class GameSystem : MonoBehaviour
         // 決定音の再生
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         // 同じシーンを再読み込み
-        SceneManager.LoadScene("Title");
+        fade.FadeIn(1f, () => SceneManager.LoadScene("Title"));
     }
 
     /// <summary>
@@ -366,6 +399,58 @@ public class GameSystem : MonoBehaviour
             highScore = score;
             PlayerPrefs.SetInt("SCORE", highScore);
             PlayerPrefs.Save();
+        }
+    }
+
+    public void ScoreUiEffect()
+    {
+        //DOTweenTMPAnimatorを作成
+        DOTweenTMPAnimator animator = new DOTweenTMPAnimator(resultscoreText);
+
+        //1文字ずつアニメーションを設定(iが何番目の文字かのインデックス)
+        //Sequenceで全文字のアニメーションをまとめる
+        var sequence = DOTween.Sequence();
+
+        sequence.SetLoops(-1);//無限ループ設定
+
+        //一文字ずつにアニメーション設定
+        var duration = 0.2f;//1回辺りのTween時間
+        for (int i = 0; i < animator.textInfo.characterCount; ++i)
+        {
+            sequence.Join(DOTween.Sequence()
+              //上に移動して戻る
+              .Append(animator.DOOffsetChar(i, animator.GetCharOffset(i) + new Vector3(0, 10, 0), duration).SetEase(Ease.OutFlash, 2))
+              //同時に1.2倍に拡大して戻る
+              .Join(animator.DOScaleChar(i, 1.2f, duration).SetEase(Ease.OutFlash, 2))
+              //同時に色を黄色にして戻す
+              .Join(animator.DOColorChar(i, Color.yellow, duration * 0.5f).SetLoops(2, LoopType.Yoyo))
+              //アニメーション後、1秒のインターバル設定
+              .AppendInterval(1f)
+              //開始は0.15秒ずつずらす
+              .SetDelay(0.15f * i)
+            );
+        }
+    }
+
+    /// <summary>
+    /// 時間帯によって背景を変える処理
+    /// </summary>
+    private void ChangeBackGround()
+    { 
+        // 夜
+        if (DateTime.Now.Hour >= 19|| DateTime.Now.Hour <= 6)
+        {
+            backGround[0].SetActive(true);
+        }
+        // 夕方,早朝
+        else if(DateTime.Now.Hour==7|| DateTime.Now.Hour == 18)
+        {
+            backGround[1].SetActive(true);
+        }
+        // 朝、昼
+        else
+        {
+            backGround[2].SetActive(true);
         }
     }
 }

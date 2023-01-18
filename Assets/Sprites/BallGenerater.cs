@@ -18,6 +18,9 @@ public class BallGenerater : MonoBehaviour
 
     public Material materials;
 
+    public int ballID;
+
+
     /// <summary>
     /// ツムの生成
     /// </summary>
@@ -26,13 +29,13 @@ public class BallGenerater : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             // 生成位置をランダムに
-            Vector2 pos = new Vector2(Random.Range(-0.3f,0.3f), 8f);
+            Vector2 pos = new Vector2(Random.Range(-0.1f, 0.1f), 2f);
             // 生成 Quaternion.identity= 回転の初期値
-            GameObject ball = Instantiate(ballPrehab,pos,Quaternion.identity);
+            GameObject ball = Instantiate(ballPrehab, pos, Quaternion.identity);
 
             // 画像の設定
             // ボールの種類だけランダムに(ボムの時はidをー１)
-            int ballID = Random.Range(0, ballSprites.Length);
+            ballID = Random.Range(0, ballSprites.Length);
             // もしボムなら、idを-1それ以外なら今ままで道理
             if (Random.Range(0, 100) < ParamsSO.Entity.bomSpownRange)
             {
@@ -48,6 +51,4 @@ public class BallGenerater : MonoBehaviour
             yield return new WaitForSeconds(0.04f);
         }
     }
-
-
 }
