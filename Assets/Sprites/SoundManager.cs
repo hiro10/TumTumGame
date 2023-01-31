@@ -40,7 +40,8 @@ public class SoundManager : MonoBehaviour
         Explosion, // 爆弾が爆発するとき
         Decision, // ボタンの決定音
         Close, // ボタンの閉じる音
-
+        CountDownSe,// カウントダウンの音
+        CountZero,// カウント0の音
     }
 
     // シングルトンにする
@@ -79,6 +80,12 @@ public class SoundManager : MonoBehaviour
         // 列挙型から流したいBGMを選ぶ（intでキャスト）
         audioSourceBGM.clip = audioClipsBGM[(int)bgm];
         audioSourceBGM.Play();
+       
+    }
+
+    public void gStopBgm()
+    {
+        audioSourceBGM.Stop();
     }
 
     /// <summary>

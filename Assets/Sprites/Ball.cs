@@ -6,6 +6,11 @@ public class Ball : MonoBehaviour
 {
     public int id;
 
+    public bool Throw=false;
+
+    // 選択されているか
+    public bool select = false;
+
     // 爆破エフェクト
     [SerializeField] GameObject explosonPrehab = default;
 
@@ -20,7 +25,7 @@ public class Ball : MonoBehaviour
         // 爆破エフェクトの生成
         GameObject explosion = Instantiate(explosonPrehab, transform.position, transform.rotation);
 
-        Destroy(explosion, 0.2f);
+        Destroy(explosion, 0.3f);
 
     }
 

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using DG.Tweening;
 using System;
+using System.Linq;
 
 // ゲームを管理
 public class GameSystem : MonoBehaviour
@@ -27,10 +28,12 @@ public class GameSystem : MonoBehaviour
     int score;
     // ハイスコア
     int highScore;
-   
-    [SerializeField] Text scoreText = default;
-    [SerializeField] Text higtscoreText = default;
+
+    [SerializeField] TextMeshProUGUI scoreText = default;
+    [SerializeField] TextMeshProUGUI higtscoreText = default;
     [SerializeField] TextMeshProUGUI resultscoreText = default;
+    [SerializeField] GameObject hiscore = default;
+
 
     // ポイント生成用プレハブ
     [SerializeField] GameObject pointEffectPrehab = default;
@@ -56,20 +59,31 @@ public class GameSystem : MonoBehaviour
     // フェード演出用
     [SerializeField] Fade fade;
 
+    public Ball[] gameObjects;
 
+    private float time;
+
+    // 点滅
+    public float speed = 0.05f;
+
+    [SerializeField] Countdown countdown;
     /// <summary>
     /// 開始処理
     /// </summary>
     private void Start()
     {
+        countdown.GetComponent<Countdown>();
         StartCoroutine(StartGame());
     }
 
     IEnumerator StartGame()
     {
         fade.FadeOut(1f);
+        SoundManager.instance.gStopBgm();
+        countdown.OnClickButtonStart();
+
         score = 0;
-        PlayerPrefs.GetInt("SCORE", highScore);
+        highScore = PlayerPrefs.GetInt("SCORE", highScore);
 
         scoreText.text = score.ToString();
         higtscoreText.text = highScore.ToString();
@@ -79,19 +93,19 @@ public class GameSystem : MonoBehaviour
         // リザルトパネルは表示しない
         resultPanel.SetActive(false);
 
-        // メインBGMを流す
-        SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
+        hiscore.SetActive(false);
+
         cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
         coundDownicon = GameObject.Find("Image").GetComponent<Image>();
 
         ChangeBackGround();
 
-        // 3秒間待つ
-        yield return new WaitForSeconds(1f);
+        // 4秒間待つ
+        yield return new WaitForSeconds(4.0f);
+        // メインBGMを流す
+        SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
         StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
         StartCoroutine(CountDown());
-
-       
     }
 
     /// <summary>
@@ -105,9 +119,9 @@ public class GameSystem : MonoBehaviour
             yield return new WaitForSeconds(1);
             timeCount--;
             timerText.text = timeCount.ToString();
-            coundDownicon.fillAmount = -(float)timeCount / (float)ParamsSO.Entity.timeCount;
+            coundDownicon.fillAmount = (float)timeCount / (float)ParamsSO.Entity.timeCount;
         }
-       
+
         gameOver = true;
 
         // ゲーム終了時に得点になるツムをつかんでいたら消して得点にする
@@ -118,9 +132,9 @@ public class GameSystem : MonoBehaviour
 
         // リザルト画面を表示
         resultPanel.SetActive(true);
-       
+
         ScoreUiEffect();
-        
+
     }
 
     /// <summary>
@@ -131,7 +145,6 @@ public class GameSystem : MonoBehaviour
     {
         score += point;
         scoreText.text = score.ToString();
-        timerText.text = timeCount.ToString();
     }
 
     /// <summary>
@@ -151,11 +164,15 @@ public class GameSystem : MonoBehaviour
         // 右クリックを押し込んだ時
         if (Input.GetMouseButtonDown(0))
         {
+            gameObjects = FindObjectsOfType<Ball>();
+
             OnDragin();
         }
         // 右クリックを離したとき
         else if (Input.GetMouseButtonUp(0))
         {
+
+            ReturnBallColor();
             OnDragEnd();
         }
         else if (isDragging)
@@ -198,6 +215,8 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     void OnDriging()
     {
+        SelctBallColorChange(Color.gray);
+
         // オブジェクトのヒット確認
         // Rayで判定
         // カメラからスクリーンに向かって飛ばす
@@ -218,6 +237,7 @@ public class GameSystem : MonoBehaviour
                 float distance = Vector2.Distance(ball.transform.position, currentDraggingBall.transform.position);
                 if (distance < ParamsSO.Entity.ballDistance)
                 {
+                    ball.Throw = true;
                     AddRemoveBall(ball);
                 }
             }
@@ -228,11 +248,16 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void OnDragEnd()
     {
+
         int removeCount = removeBalls.Count;
 
         // つなげたツムが3個以上ならツムを消す
         if (removeCount >= 3)
         {
+            if(removeCount>6)
+            {
+                timeCount += 3;
+            }
             for (int i = 0; i < removeCount; i++)
             {
                 removeBalls[i].Explosion();
@@ -254,7 +279,7 @@ public class GameSystem : MonoBehaviour
         for (int i = 0; i < removeCount; i++)
         {
             // 大きさを戻す
-            removeBalls[i].transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+            removeBalls[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             // 色を戻す
             removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
         }
@@ -273,11 +298,12 @@ public class GameSystem : MonoBehaviour
         // リストがBallを持っていなかったら
         if (removeBalls.Contains(ball) == false)
         {
+            ball.select = true;
             // リストに加えた時にボールを大きくする
             // TODO スクリプタブルオブジェクトにしよう大きさと色
             ball.transform.localScale = Vector3.one * 1.4f;
             // 色を変える
-            ball.GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f,0.4f);
+            ball.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.4f);
 
             // ballをリストに追加する
             removeBalls.Add(ball);
@@ -308,7 +334,7 @@ public class GameSystem : MonoBehaviour
             {
                 explosionList.Add(ball);
             }
-           
+
         }
 
         // つなげたツムが3個以上ならツムを消す
@@ -350,7 +376,7 @@ public class GameSystem : MonoBehaviour
         // 決定音の再生
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         // 同じシーンを再読み込み(1秒間フェード処理)
-        fade.FadeIn(1f,()=> SceneManager.LoadScene("Main"));
+        fade.FadeIn(1f, () => SceneManager.LoadScene("Main"));
     }
 
     /// <summary>
@@ -373,7 +399,6 @@ public class GameSystem : MonoBehaviour
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         // オンラインランキングに登録する
         naichilab.RankingLoader.Instance.SendScoreAndShowRanking(score);
-        
     }
 
     /// <summary>
@@ -383,7 +408,7 @@ public class GameSystem : MonoBehaviour
     public IEnumerator CameraShake()
     {
         // カメラを揺らす
-        cameraShake.Shake(0.25f, 0.1f);
+        cameraShake.Shake(0.25f, 0.5f);
 
         yield return new WaitForSeconds(2.0f);
     }
@@ -394,8 +419,9 @@ public class GameSystem : MonoBehaviour
     public void ChangeHightScore()
     {
         resultscoreText.text = score.ToString();
-        if(highScore<score)
+        if (highScore < score)
         {
+            hiscore.SetActive(true);
             highScore = score;
             PlayerPrefs.SetInt("SCORE", highScore);
             PlayerPrefs.Save();
@@ -413,6 +439,7 @@ public class GameSystem : MonoBehaviour
 
         sequence.SetLoops(-1);//無限ループ設定
 
+
         //一文字ずつにアニメーション設定
         var duration = 0.2f;//1回辺りのTween時間
         for (int i = 0; i < animator.textInfo.characterCount; ++i)
@@ -424,6 +451,7 @@ public class GameSystem : MonoBehaviour
               .Join(animator.DOScaleChar(i, 1.2f, duration).SetEase(Ease.OutFlash, 2))
               //同時に色を黄色にして戻す
               .Join(animator.DOColorChar(i, Color.yellow, duration * 0.5f).SetLoops(2, LoopType.Yoyo))
+
               //アニメーション後、1秒のインターバル設定
               .AppendInterval(1f)
               //開始は0.15秒ずつずらす
@@ -436,14 +464,14 @@ public class GameSystem : MonoBehaviour
     /// 時間帯によって背景を変える処理
     /// </summary>
     private void ChangeBackGround()
-    { 
+    {
         // 夜
-        if (DateTime.Now.Hour >= 19|| DateTime.Now.Hour <= 6)
+        if (DateTime.Now.Hour >= 19 || DateTime.Now.Hour <= 6)
         {
             backGround[0].SetActive(true);
         }
         // 夕方,早朝
-        else if(DateTime.Now.Hour==7|| DateTime.Now.Hour == 18)
+        else if (DateTime.Now.Hour == 7 || DateTime.Now.Hour == 18)
         {
             backGround[1].SetActive(true);
         }
@@ -453,4 +481,67 @@ public class GameSystem : MonoBehaviour
             backGround[2].SetActive(true);
         }
     }
+
+    /// <summary>
+    /// 選択した種類のボールの色を変える
+    /// </summary>
+    private void SelctBallColorChange(Color color)
+    {
+        for (int i = 0; i < gameObjects.Length; i++)
+        {
+            // nullチェック
+            if (gameObjects[i] == null || currentDraggingBall == null)
+            {
+                return;
+            }
+            // 選択したツムが爆弾でないとき
+            if (gameObjects[i].id != -1 || currentDraggingBall.id != -1)
+            {
+                // 距離が近ければ
+                float distance = Vector2.Distance(gameObjects[i].transform.position, currentDraggingBall.transform.position);
+                if (distance < ParamsSO.Entity.ballDistance)
+                {
+                    // 選んだツムと同じツム
+                    if (gameObjects[i].id == currentDraggingBall.id && gameObjects[i].select == true)
+                    {
+                        // 色を変える
+                        gameObjects[i].GetComponent<SpriteRenderer>().color = color;
+                    }
+                    else if (gameObjects[i].id == currentDraggingBall.id && gameObjects[i].select == false)
+                    {
+                        if (gameObjects[i].id == 0 || gameObjects[i].id == 3)
+                        {
+                            // 色を変える
+                            gameObjects[i].GetComponent<SpriteRenderer>().color = Color.yellow;
+                        }
+                        else if (gameObjects[i].id == 1 || gameObjects[i].id == 2)
+                        {
+                            // 色を変える
+                            gameObjects[i].GetComponent<SpriteRenderer>().color = Color.red;
+
+                        }
+                    }
+
+                    // そうでなければ変更なし
+                    else if (gameObjects[i].Throw == false)
+                    {
+                        gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// ボールの色を戻す
+    /// </summary>
+    private void ReturnBallColor()
+    {
+        for (int i = 0; i < gameObjects.Length; i++)
+        {
+            gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
+            gameObjects[i].select = false;
+        }
+    }
 }
+

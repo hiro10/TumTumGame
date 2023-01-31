@@ -57,7 +57,8 @@ public class Title : MonoBehaviour
         if (optionPanel == null)
         {
             optionPanel = GameObject.Find("OptionWindow");
-        }      
+        }
+        Invoke(nameof(OnTestButton), 0.5f); 
     }
 
     /// <summary>
@@ -191,6 +192,7 @@ public class Title : MonoBehaviour
 
     IEnumerator TapText()
     {
+       
         speed = 4f;
         yield return new WaitForSeconds(1f);
         tapText.gameObject.SetActive(false);

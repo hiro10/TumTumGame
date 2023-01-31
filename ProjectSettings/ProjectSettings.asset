@@ -779,10 +779,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 6ab15caf-61e4-4077-8b28-e91331a4db5d
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: StressCrusher
+  organizationId: hiro025
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
