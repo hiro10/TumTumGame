@@ -22,7 +22,6 @@ public class GameSystem : MonoBehaviour
 
     // 今選択しているボールを格納
     Ball currentDraggingBall;
-
     // スコア:TODO別クラスにしよう
     // 現在のスコア
     int score;
@@ -66,23 +65,35 @@ public class GameSystem : MonoBehaviour
     // 点滅
     public float speed = 0.05f;
 
-    [SerializeField] Countdown countdown;
+    [SerializeField] Countdown startCountDown;
     /// <summary>
     /// 開始処理
     /// </summary>
     private void Start()
     {
-        countdown.GetComponent<Countdown>();
+        startCountDown.GetComponent<Countdown>();
         StartCoroutine(StartGame());
     }
 
+    /// <summary>
+    /// 開始処理
+    /// </summary>
+    /// <returns></returns>
     IEnumerator StartGame()
     {
+        // 1秒間フェードアウト処理
         fade.FadeOut(1f);
-        SoundManager.instance.gStopBgm();
-        countdown.OnClickButtonStart();
+        
+        // BGM止める
+        SoundManager.instance.StopBgm();
 
+        // カウントダウン処理
+        startCountDown.OnClickButtonStart();
+
+        // スコアの初期値設定
         score = 0;
+
+        // ハイスコアの読み込み
         highScore = PlayerPrefs.GetInt("SCORE", highScore);
 
         scoreText.text = score.ToString();
@@ -102,14 +113,19 @@ public class GameSystem : MonoBehaviour
 
         // 4秒間待つ
         yield return new WaitForSeconds(4.0f);
+
         // メインBGMを流す
         SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
+
+        // ツムの生成
         StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
+
+        // 制限時間
         StartCoroutine(CountDown());
     }
 
     /// <summary>
-    /// カウントダウン
+    /// 制限時間処理
     /// </summary>
     IEnumerator CountDown()
     {
@@ -133,8 +149,8 @@ public class GameSystem : MonoBehaviour
         // リザルト画面を表示
         resultPanel.SetActive(true);
 
+        // 
         ScoreUiEffect();
-
     }
 
     /// <summary>
@@ -164,6 +180,7 @@ public class GameSystem : MonoBehaviour
         // 右クリックを押し込んだ時
         if (Input.GetMouseButtonDown(0))
         {
+            // ボールの状態を取得
             gameObjects = FindObjectsOfType<Ball>();
 
             OnDragin();
@@ -171,7 +188,6 @@ public class GameSystem : MonoBehaviour
         // 右クリックを離したとき
         else if (Input.GetMouseButtonUp(0))
         {
-
             ReturnBallColor();
             OnDragEnd();
         }
@@ -248,16 +264,11 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void OnDragEnd()
     {
-
         int removeCount = removeBalls.Count;
 
         // つなげたツムが3個以上ならツムを消す
         if (removeCount >= 3)
         {
-            if(removeCount>6)
-            {
-                timeCount += 3;
-            }
             for (int i = 0; i < removeCount; i++)
             {
                 removeBalls[i].Explosion();
@@ -276,13 +287,13 @@ public class GameSystem : MonoBehaviour
 
         }
         // すべての removeballを元に戻す
-        for (int i = 0; i < removeCount; i++)
-        {
-            // 大きさを戻す
-            removeBalls[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            // 色を戻す
-            removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
-        }
+        //for (int i = 0; i < removeCount; i++)
+        //{
+        //    // 大きさを戻す
+        //    removeBalls[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        //    // 色を戻す
+        //    removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
+        //}
 
         removeBalls.Clear();
         isDragging = false;
@@ -428,6 +439,9 @@ public class GameSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// リザルト画面でのスコア表示のTMPアニメーション処理
+    /// </summary>
     public void ScoreUiEffect()
     {
         //DOTweenTMPAnimatorを作成
@@ -451,7 +465,6 @@ public class GameSystem : MonoBehaviour
               .Join(animator.DOScaleChar(i, 1.2f, duration).SetEase(Ease.OutFlash, 2))
               //同時に色を黄色にして戻す
               .Join(animator.DOColorChar(i, Color.yellow, duration * 0.5f).SetLoops(2, LoopType.Yoyo))
-
               //アニメーション後、1秒のインターバル設定
               .AppendInterval(1f)
               //開始は0.15秒ずつずらす
@@ -499,7 +512,7 @@ public class GameSystem : MonoBehaviour
             {
                 // 距離が近ければ
                 float distance = Vector2.Distance(gameObjects[i].transform.position, currentDraggingBall.transform.position);
-                if (distance < ParamsSO.Entity.ballDistance)
+                if (distance < ParamsSO.Entity.ballDistance||gameObjects[i].select==true)
                 {
                     // 選んだツムと同じツム
                     if (gameObjects[i].id == currentDraggingBall.id && gameObjects[i].select == true)
@@ -521,25 +534,30 @@ public class GameSystem : MonoBehaviour
 
                         }
                     }
-
-                    // そうでなければ変更なし
-                    else if (gameObjects[i].Throw == false)
-                    {
-                        gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
-                    }
+                }
+                // そうでなければ変更なし
+                else // (gameObjects[i].Throw == false)
+                {
+                    gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
                 }
             }
         }
     }
 
     /// <summary>
-    /// ボールの色を戻す
+    /// ボールの色と形をもとに戻す
     /// </summary>
     private void ReturnBallColor()
     {
         for (int i = 0; i < gameObjects.Length; i++)
         {
+            if(gameObjects[i] == null)
+            {
+                return;
+            }
+
             gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
+            gameObjects[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             gameObjects[i].select = false;
         }
     }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7979916363426944646}
   - component: {fileID: 7979916363426944647}
   - component: {fileID: 3808124269323568750}
+  - component: {fileID: -7850565232365459433}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -52,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 510776e22d1225e4aae6eda6040d8292, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -134,5 +135,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  Throw: 0
+  select: 0
   explosonPrehab: {fileID: 5951620659722697464, guid: 064b9afb5f6e81b4b801d3daf60b3274,
     type: 3}
+--- !u!114 &-7850565232365459433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7979916363426944644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d1552cccc31e54db72505a6e15bb45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 510776e22d1225e4aae6eda6040d8292, type: 2}

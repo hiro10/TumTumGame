@@ -83,7 +83,7 @@ public class SoundManager : MonoBehaviour
        
     }
 
-    public void gStopBgm()
+    public void StopBgm()
     {
         audioSourceBGM.Stop();
     }
