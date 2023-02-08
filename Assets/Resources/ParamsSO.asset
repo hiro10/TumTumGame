@@ -17,4 +17,4 @@ MonoBehaviour:
   ballDistance: 1.2
   bomRange: 2
   bomSpownRange: 1
-  timeCount: 30
+  timeCount: 60

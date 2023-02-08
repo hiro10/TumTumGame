@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-using System;
+
 
 public class Title : MonoBehaviour
 {
@@ -30,11 +30,7 @@ public class Title : MonoBehaviour
     // タイトル用(DoTween)
     public TextMeshProUGUI title;
 
-    // 背景用
-    [SerializeField] GameObject[] backGround;
-
     [SerializeField] Fade fade;
-
 
     /// <summary>
     /// 開始処理
@@ -42,8 +38,6 @@ public class Title : MonoBehaviour
     private void Start()
     {
         fade.FadeOut(1f);
-
-        ChangeBackGround();
 
         StartMenu.SetActive(false);
 
@@ -199,28 +193,6 @@ public class Title : MonoBehaviour
         StartMenu.SetActive(true);
 
         //FadeManager.Instance.LoadScene("Main", 1f);
-    }
-
-    /// <summary>
-    /// 時間帯によって背景を変える処理
-    /// </summary>
-    private void ChangeBackGround()
-    {
-        // 夜
-        if (DateTime.Now.Hour >= 19 || DateTime.Now.Hour <= 6)
-        {
-            backGround[0].SetActive(true);
-        }
-        // 夕方,早朝
-        else if (DateTime.Now.Hour == 7 || DateTime.Now.Hour == 18)
-        {
-            backGround[1].SetActive(true);
-        }
-        // 朝、昼
-        else
-        {
-            backGround[2].SetActive(true);
-        }
     }
 
     void OnActiveSceneChanged()

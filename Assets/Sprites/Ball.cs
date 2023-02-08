@@ -6,13 +6,26 @@ public class Ball : MonoBehaviour
 {
     public int id;
 
-    public bool Throw=false;
-
     // 選択されているか
     public bool select = false;
 
     // 爆破エフェクト
     [SerializeField] GameObject explosonPrehab = default;
+
+    public Material material;
+    [SerializeField] Texture texture;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        material.SetFloat("_Effect", 0);
+       
+    }
+
+    private void Update()
+    {
+    
+    }
 
     /// <summary>
     /// 爆発の発生

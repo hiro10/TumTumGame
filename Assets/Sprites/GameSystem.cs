@@ -33,7 +33,8 @@ public class GameSystem : MonoBehaviour
     [SerializeField] TextMeshProUGUI resultscoreText = default;
     [SerializeField] GameObject hiscore = default;
 
-
+    [SerializeField] Texture[] tumTex;
+   
     // ポイント生成用プレハブ
     [SerializeField] GameObject pointEffectPrehab = default;
 
@@ -49,9 +50,6 @@ public class GameSystem : MonoBehaviour
     bool gameOver;
 
     [SerializeField] Image coundDownicon;
-
-    // 背景用
-    [SerializeField] GameObject[] backGround;
 
     DateTime awakeDateTime = DateTime.Now;
 
@@ -71,6 +69,7 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        
         startCountDown.GetComponent<Countdown>();
         StartCoroutine(StartGame());
     }
@@ -108,8 +107,6 @@ public class GameSystem : MonoBehaviour
 
         cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
         coundDownicon = GameObject.Find("Image").GetComponent<Image>();
-
-        ChangeBackGround();
 
         // 4秒間待つ
         yield return new WaitForSeconds(4.0f);
@@ -180,8 +177,6 @@ public class GameSystem : MonoBehaviour
         // 右クリックを押し込んだ時
         if (Input.GetMouseButtonDown(0))
         {
-            // ボールの状態を取得
-            gameObjects = FindObjectsOfType<Ball>();
 
             OnDragin();
         }
@@ -231,7 +226,10 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     void OnDriging()
     {
-        SelctBallColorChange(Color.gray);
+        // ボールの状態を取得
+        gameObjects = FindObjectsOfType<Ball>();
+
+        SelctBallColorChange();
 
         // オブジェクトのヒット確認
         // Rayで判定
@@ -247,13 +245,12 @@ public class GameSystem : MonoBehaviour
             Ball ball = hit.collider.GetComponent<Ball>();
 
             // 同じ種類だったら
-            if (ball.id == currentDraggingBall.id)
+            if (ball.id == currentDraggingBall.id&&ball.select==false)
             {
                 // 距離が近かったら
                 float distance = Vector2.Distance(ball.transform.position, currentDraggingBall.transform.position);
                 if (distance < ParamsSO.Entity.ballDistance)
                 {
-                    ball.Throw = true;
                     AddRemoveBall(ball);
                 }
             }
@@ -286,14 +283,6 @@ public class GameSystem : MonoBehaviour
             SoundManager.instance.PlaySE(SoundManager.SE.Touch);
 
         }
-        // すべての removeballを元に戻す
-        //for (int i = 0; i < removeCount; i++)
-        //{
-        //    // 大きさを戻す
-        //    removeBalls[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-        //    // 色を戻す
-        //    removeBalls[i].GetComponent<SpriteRenderer>().color = Color.white;
-        //}
 
         removeBalls.Clear();
         isDragging = false;
@@ -474,31 +463,9 @@ public class GameSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// 時間帯によって背景を変える処理
-    /// </summary>
-    private void ChangeBackGround()
-    {
-        // 夜
-        if (DateTime.Now.Hour >= 19 || DateTime.Now.Hour <= 6)
-        {
-            backGround[0].SetActive(true);
-        }
-        // 夕方,早朝
-        else if (DateTime.Now.Hour == 7 || DateTime.Now.Hour == 18)
-        {
-            backGround[1].SetActive(true);
-        }
-        // 朝、昼
-        else
-        {
-            backGround[2].SetActive(true);
-        }
-    }
-
-    /// <summary>
     /// 選択した種類のボールの色を変える
     /// </summary>
-    private void SelctBallColorChange(Color color)
+    private void SelctBallColorChange()
     {
         for (int i = 0; i < gameObjects.Length; i++)
         {
@@ -518,27 +485,21 @@ public class GameSystem : MonoBehaviour
                     if (gameObjects[i].id == currentDraggingBall.id && gameObjects[i].select == true)
                     {
                         // 色を変える
-                        gameObjects[i].GetComponent<SpriteRenderer>().color = color;
+                        gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 1f);
+                        gameObjects[i].GetComponent<SpriteRenderer>().material.SetTexture("_MainTex", tumTex[gameObjects[i].id]);
+                        gameObjects[i].GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f,0.8f);
                     }
                     else if (gameObjects[i].id == currentDraggingBall.id && gameObjects[i].select == false)
                     {
-                        if (gameObjects[i].id == 0 || gameObjects[i].id == 3)
-                        {
-                            // 色を変える
-                            gameObjects[i].GetComponent<SpriteRenderer>().color = Color.yellow;
-                        }
-                        else if (gameObjects[i].id == 1 || gameObjects[i].id == 2)
-                        {
-                            // 色を変える
-                            gameObjects[i].GetComponent<SpriteRenderer>().color = Color.red;
+                        // 色を変える
+                        gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 1f);
 
-                        }
                     }
                 }
                 // そうでなければ変更なし
-                else // (gameObjects[i].Throw == false)
+                else 
                 {
-                    gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
+                    gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 0);
                 }
             }
         }
@@ -556,6 +517,7 @@ public class GameSystem : MonoBehaviour
                 return;
             }
 
+            gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 0);
             gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
             gameObjects[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             gameObjects[i].select = false;

@@ -19,6 +19,8 @@ public class BallGenerater : MonoBehaviour
     public Material materials;
 
     public int ballID;
+    // マテリアル格納用（5つ）
+    public Material ColorSet = default;
 
 
     /// <summary>
