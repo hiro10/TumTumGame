@@ -18,7 +18,7 @@ public class ViewFPS : MonoBehaviour
     private void Start()
     {
         // FPSの値を別の場所で指定しているなら以下の設定は消す
-        Application.targetFrameRate = 30;
+        Application.targetFrameRate = 60;
         // テキストコンポーネントの取得
         _tex = this.GetComponent<Text>();
     }
