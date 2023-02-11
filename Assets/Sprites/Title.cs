@@ -6,7 +6,9 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
-
+/// <summary>
+/// タイトル処理
+/// </summary>
 public class Title : MonoBehaviour
 {
     // 点滅スピード
@@ -21,6 +23,7 @@ public class Title : MonoBehaviour
     // 点滅解除後に表示させるUI
     [SerializeField] GameObject StartMenu;
 
+    // メニューボタン格納用
     [SerializeField] Button[] MenmuButton = new Button[3];
 
     // オプション画面用(DoTween)
@@ -174,8 +177,10 @@ public class Title : MonoBehaviour
         naichilab.RankingLoader.Instance.SendScoreAndShowRanking(100);
     }
 
-
-    //Alpha値を更新してColorを返す
+    /// <summary>
+    /// Alpha値を更新してColorを返す点滅処理
+    /// </summary>
+    /// <param name="color"></param>
     Color GetAlphaColor(Color color)
     {
         time += Time.deltaTime * 5.0f * speed;
@@ -184,19 +189,19 @@ public class Title : MonoBehaviour
         return color;
     }
 
+    /// <summary>
+    /// 「タップ」を押した時のコルーチン
+    /// </summary>
+    /// <returns></returns>
     IEnumerator TapText()
-    {
-       
+    {   
+        // 点滅速度の上昇
         speed = 4f;
-        yield return new WaitForSeconds(1f);
+        // 1s待つ
+        yield return new WaitForSeconds(1);
+        // タップオブジェクトを非表示に
         tapText.gameObject.SetActive(false);
+        // スタートメニューを表示
         StartMenu.SetActive(true);
-
-        //FadeManager.Instance.LoadScene("Main", 1f);
-    }
-
-    void OnActiveSceneChanged()
-    {
-        
     }
 }

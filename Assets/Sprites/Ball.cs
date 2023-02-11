@@ -15,16 +15,13 @@ public class Ball : MonoBehaviour
     public Material material;
     [SerializeField] Texture texture;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// 開始処理
+    /// </summary>
     void Start()
     {
+        // マテリアルのシェーダーエフェクトを0に
         material.SetFloat("_Effect", 0);
-       
-    }
-
-    private void Update()
-    {
-    
     }
 
     /// <summary>
@@ -42,6 +39,10 @@ public class Ball : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// ボムかどうかの判定
+    /// </summary>
+    /// <returns></returns>
     public bool isBomb()
     {
         return id == -1;

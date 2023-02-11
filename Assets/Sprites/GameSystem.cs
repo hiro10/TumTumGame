@@ -47,6 +47,7 @@ public class GameSystem : MonoBehaviour
 
     [SerializeField] CameraShake cameraShake;
 
+    // ゲームオーバー判定用
     bool gameOver;
 
     [SerializeField] Image coundDownicon;
@@ -68,8 +69,7 @@ public class GameSystem : MonoBehaviour
     /// 開始処理
     /// </summary>
     private void Start()
-    {
-        
+    {   
         startCountDown.GetComponent<Countdown>();
         StartCoroutine(StartGame());
     }
@@ -440,8 +440,8 @@ public class GameSystem : MonoBehaviour
         //Sequenceで全文字のアニメーションをまとめる
         var sequence = DOTween.Sequence();
 
-        sequence.SetLoops(-1);//無限ループ設定
-
+        //無限ループ設定
+        sequence.SetLoops(-1);
 
         //一文字ずつにアニメーション設定
         var duration = 0.2f;//1回辺りのTween時間

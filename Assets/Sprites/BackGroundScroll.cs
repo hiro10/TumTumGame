@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// 時間帯によって背景を変える
+/// </summary>
 public class BackGroundScroll : MonoBehaviour
 {
-    // 背景用
+    // 背景用テクスチャ
     [SerializeField] Texture[] backGround;
 
+    // 背景マテリアル
     [SerializeField] Material back;
-    // Start is called before the first frame update
+ 
     void Start()
     {
         ChangeBackGround();
