@@ -57,7 +57,7 @@ public class GameSystem : MonoBehaviour
     // フェード演出用
     [SerializeField] Fade fade;
 
-    public Ball[] gameObjects;
+    public GameObject[] ballPrefab;
 
     private float time;
 
@@ -70,7 +70,6 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void Start()
     {   
-        startCountDown.GetComponent<Countdown>();
         StartCoroutine(StartGame());
     }
 
@@ -104,9 +103,6 @@ public class GameSystem : MonoBehaviour
         resultPanel.SetActive(false);
 
         hiscore.SetActive(false);
-
-        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-        coundDownicon = GameObject.Find("Image").GetComponent<Image>();
 
         // 4秒間待つ
         yield return new WaitForSeconds(4.0f);
@@ -176,8 +172,7 @@ public class GameSystem : MonoBehaviour
         }
         // 右クリックを押し込んだ時
         if (Input.GetMouseButtonDown(0))
-        {
-
+        { 
             OnDragin();
         }
         // 右クリックを離したとき
@@ -226,9 +221,6 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     void OnDriging()
     {
-        // ボールの状態を取得
-        gameObjects = FindObjectsOfType<Ball>();
-
         SelctBallColorChange();
 
         // オブジェクトのヒット確認
@@ -467,39 +459,40 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void SelctBallColorChange()
     {
-        for (int i = 0; i < gameObjects.Length; i++)
+        // ボールの状態を取得
+        ballPrefab = GameObject.FindGameObjectsWithTag("Ball");
+        for (int i = 0; i < ballPrefab.Length; i++)
         {
             // nullチェック
-            if (gameObjects[i] == null || currentDraggingBall == null)
+            if (ballPrefab[i] == null || currentDraggingBall == null)
             {
                 return;
             }
             // 選択したツムが爆弾でないとき
-            if (gameObjects[i].id != -1 || currentDraggingBall.id != -1)
+            if (ballPrefab[i].GetComponent<Ball>().id != -1 || currentDraggingBall.id != -1)
             {
                 // 距離が近ければ
-                float distance = Vector2.Distance(gameObjects[i].transform.position, currentDraggingBall.transform.position);
-                if (distance < ParamsSO.Entity.ballDistance||gameObjects[i].select==true)
+                float distance = Vector2.Distance(ballPrefab[i].transform.position, currentDraggingBall.transform.position);
+                if (distance < ParamsSO.Entity.ballDistance || ballPrefab[i].GetComponent<Ball>().select == true)
                 {
                     // 選んだツムと同じツム
-                    if (gameObjects[i].id == currentDraggingBall.id && gameObjects[i].select == true)
+                    if (ballPrefab[i].GetComponent<Ball>().id == currentDraggingBall.id && ballPrefab[i].GetComponent<Ball>().select == true)
                     {
                         // 色を変える
-                        gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 1f);
-                        gameObjects[i].GetComponent<SpriteRenderer>().material.SetTexture("_MainTex", tumTex[gameObjects[i].id]);
-                        gameObjects[i].GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f,0.8f);
+                        ballPrefab[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 1f);
+                        ballPrefab[i].GetComponent<SpriteRenderer>().material.SetTexture("_MainTex", tumTex[ballPrefab[i].GetComponent<Ball>().id]);
+                        ballPrefab[i].GetComponent<SpriteRenderer>().color = new Color(0.2f, 0.2f, 0.2f, 0.8f);
                     }
-                    else if (gameObjects[i].id == currentDraggingBall.id && gameObjects[i].select == false)
+                    else if (ballPrefab[i].GetComponent<Ball>().id == currentDraggingBall.id && ballPrefab[i].GetComponent<Ball>().select == false)
                     {
                         // 色を変える
-                        gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 1f);
-
+                        ballPrefab[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 1f);
                     }
                 }
                 // そうでなければ変更なし
-                else 
+                else
                 {
-                    gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 0);
+                    ballPrefab[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 0);
                 }
             }
         }
@@ -510,17 +503,17 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     private void ReturnBallColor()
     {
-        for (int i = 0; i < gameObjects.Length; i++)
+        for (int i = 0; i < ballPrefab.Length; i++)
         {
-            if(gameObjects[i] == null)
+            if(ballPrefab[i] == null)
             {
                 return;
             }
 
-            gameObjects[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 0);
-            gameObjects[i].GetComponent<SpriteRenderer>().color = Color.white;
-            gameObjects[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            gameObjects[i].select = false;
+            ballPrefab[i].GetComponent<SpriteRenderer>().material.SetFloat("_Effect", 0);
+            ballPrefab[i].GetComponent<SpriteRenderer>().color = Color.white;
+            ballPrefab[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            ballPrefab[i].GetComponent<Ball>().select = false;
         }
     }
 }

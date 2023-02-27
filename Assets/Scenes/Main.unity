@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -615,7 +615,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d9a9059141f6c4243bab94177ca58f96, type: 3}
   bombSprite: {fileID: 21300000, guid: 5479c6adc62c59a48a7743f834d57813, type: 3}
   materials: {fileID: 2100000, guid: 6ddf098d6b389c849a0748951c290891, type: 2}
-  ballID: 0
   ColorSet: {fileID: 2100000, guid: dce592aa5ef75bf47a49243c54355c9d, type: 2}
 --- !u!4 &299704838
 Transform:
@@ -1264,7 +1263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -30.010002, y: 127.00006}
+  m_AnchoredPosition: {x: -30.010002, y: 118}
   m_SizeDelta: {x: 140.98666, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &777862552
@@ -1286,7 +1285,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: HIGH SCORE
+  m_text: HiScore
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 84d79746630282d449a99a9bd3d09035, type: 2}
   m_sharedMaterial: {fileID: 6449697662000914920, guid: 84d79746630282d449a99a9bd3d09035,
@@ -2341,7 +2340,7 @@ MonoBehaviour:
   cameraShake: {fileID: 519420033}
   coundDownicon: {fileID: 1693398627}
   fade: {fileID: 2321225111095790807}
-  gameObjects: []
+  ballPrefab: []
   speed: 0.05
   startCountDown: {fileID: 2061296894}
 --- !u!4 &1333671984
@@ -2907,7 +2906,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 770, y: -263}
+  m_AnchoredPosition: {x: 770, y: -199}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2061296892
@@ -3319,7 +3318,7 @@ PrefabInstance:
     - target: {fileID: 8767905864680239526, guid: 82b51448bb542bb45b5de707808b9896,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8767905864680239527, guid: 82b51448bb542bb45b5de707808b9896,
         type: 3}

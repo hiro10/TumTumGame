@@ -16,10 +16,12 @@ public class BallGenerater : MonoBehaviour
     // ボム
     [SerializeField] Sprite bombSprite = default;
 
-    public Material materials;
+    // ボムマテリアル格納
+    [SerializeField] Material materials = default;
 
-    public int ballID;
-    // マテリアル格納用（5つ）
+    private int ballID { get; set; }
+
+    // ツムマテリアル格納用
     public Material ColorSet = default;
 
 

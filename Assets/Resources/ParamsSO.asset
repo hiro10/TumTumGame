@@ -16,5 +16,5 @@ MonoBehaviour:
   ScorePint: 50
   ballDistance: 1.2
   bomRange: 2
-  bomSpownRange: 1
+  bomSpownRange: 29
   timeCount: 60

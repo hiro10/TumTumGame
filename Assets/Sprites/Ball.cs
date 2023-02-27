@@ -12,7 +12,7 @@ public class Ball : MonoBehaviour
     // 爆破エフェクト
     [SerializeField] GameObject explosonPrehab = default;
 
-    public Material material;
+    [SerializeField] Material material;
     [SerializeField] Texture texture;
 
     /// <summary>

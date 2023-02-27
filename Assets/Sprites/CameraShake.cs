@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;//’Ç‰Á
-using UnityEngine.SceneManagement;//’Ç‰Á
+
 
 public class CameraShake : MonoBehaviour
 {
