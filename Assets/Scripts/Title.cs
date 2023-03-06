@@ -12,7 +12,7 @@ using TMPro;
 public class Title : MonoBehaviour
 {
     // 点滅スピード
-    public float speed = 1.0f;
+    [SerializeField] private float speed = 1.0f;
 
     // 点滅させたいUI格納
     [SerializeField] private TextMeshProUGUI tapText;
@@ -27,13 +27,13 @@ public class Title : MonoBehaviour
     [SerializeField] Button[] MenmuButton = new Button[3];
 
     // オプション画面用(DoTween)
-    public GameObject optionPanel;
+    [SerializeField] private GameObject optionPanel;
     private bool isDefaultScaleoptionPanel;
 
     // タイトル用(DoTween)
-    public TextMeshProUGUI title;
+    [SerializeField] private TextMeshProUGUI title;
 
-    [SerializeField] Fade fade;
+    [SerializeField] private Fade fade;
 
     /// <summary>
     /// 開始処理
@@ -49,6 +49,9 @@ public class Title : MonoBehaviour
 
         // タイトルBGMの再生
         SoundManager.instance.PlayBGM(SoundManager.BGM.Title);
+
+        optionPanel.SetActive(false);
+        optionPanel.transform.localScale = Vector3.zero;
 
         // オプションウィンドウのnullチェック
         if (optionPanel == null)
@@ -84,8 +87,15 @@ public class Title : MonoBehaviour
         // 決定音の再生
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
 
+        // 押せなかったボタンを押せるように
+        for (int i = 0; i < MenmuButton.Length; i++)
+        {
+            MenmuButton[i].interactable = false;
+        }
+
         // Mainシーンに遷移
         fade.FadeIn(1f, () => SceneManager.LoadScene("Main"));
+
     }
 
     /// <summary>
@@ -129,11 +139,12 @@ public class Title : MonoBehaviour
     {
         // 決定音の再生
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
+        optionPanel.SetActive(true);
 
         if (!isDefaultScaleoptionPanel)
         {
             // オプションウィンドウをだんだん拡大
-            optionPanel.transform.DOScale(new Vector3(1, 1, 1), 0.2f);
+            optionPanel.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.2f);
             
             isDefaultScaleoptionPanel = true;
         }
@@ -157,6 +168,10 @@ public class Title : MonoBehaviour
         {
             // オプションウィンドウをだんだん縮小
             optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f);
+            if(optionPanel.transform.localScale==Vector3.zero)
+            {
+                optionPanel.SetActive(false);
+            }
             isDefaultScaleoptionPanel = false;
         }
 
@@ -204,4 +219,5 @@ public class Title : MonoBehaviour
         // スタートメニューを表示
         StartMenu.SetActive(true);
     }
+
 }

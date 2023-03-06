@@ -47,4 +47,10 @@ public class Ball : MonoBehaviour
     {
         return id == -1;
     }
+
+    private void OnDestroy()
+    {
+        material = null;
+        texture = null;
+    }
 }
