@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ParamsSO
   m_EditorClassIdentifier: 
   initBallCount: 55
-  ScorePint: 50
-  ballDistance: 1.2
+  ScorePint: 100
+  ballDistance: 1.5
   bomRange: 2
-  bomSpownRange: 29
+  bomSpownRange: 1
   timeCount: 60

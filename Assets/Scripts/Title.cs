@@ -168,10 +168,7 @@ public class Title : MonoBehaviour
         {
             // オプションウィンドウをだんだん縮小
             optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f);
-            if(optionPanel.transform.localScale==Vector3.zero)
-            {
-                optionPanel.SetActive(false);
-            }
+            
             isDefaultScaleoptionPanel = false;
         }
 
