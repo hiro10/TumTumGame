@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143610fc49eb40846b7175beaef58b6e, type: 3}
   m_Name: ParamsSO
   m_EditorClassIdentifier: 
-  initBallCount: 40
-  ScorePint: 50
+  initBallCount: 55
+  ScorePint: 100
   ballDistance: 1.5
-  bomRange: 1.7
-  bomSpownRange: 2
+  bomRange: 2
+  bomSpownRange: 1
   timeCount: 60
