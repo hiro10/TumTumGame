@@ -40,18 +40,22 @@ public class Title : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        // タイトルBGMの再生
+        SoundManager.instance.PlayBGM(SoundManager.BGM.Title);
+        
         fade.FadeOut(1f);
-
-        StartMenu.SetActive(false);
-
+        if (StartMenu != null)
+        {
+            StartMenu.SetActive(false);
+        }
         // dotweenの判定トリガーをfalseに
         isDefaultScaleoptionPanel = false;
 
-        // タイトルBGMの再生
-        SoundManager.instance.PlayBGM(SoundManager.BGM.Title);
-
-        optionPanel.SetActive(false);
-        optionPanel.transform.localScale = Vector3.zero;
+        if (optionPanel != null)
+        {
+            optionPanel.SetActive(false);
+            optionPanel.transform.localScale = Vector3.zero;
+        }
 
         // オプションウィンドウのnullチェック
         if (optionPanel == null)
