@@ -40,18 +40,22 @@ public class Title : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        // タイトルBGMの再生
+        SoundManager.instance.PlayBGM(SoundManager.BGM.Title);
+        
         fade.FadeOut(1f);
-
-        StartMenu.SetActive(false);
-
+        if (StartMenu != null)
+        {
+            StartMenu.SetActive(false);
+        }
         // dotweenの判定トリガーをfalseに
         isDefaultScaleoptionPanel = false;
 
-        // タイトルBGMの再生
-        SoundManager.instance.PlayBGM(SoundManager.BGM.Title);
-
-        optionPanel.SetActive(false);
-        optionPanel.transform.localScale = Vector3.zero;
+        if (optionPanel != null)
+        {
+            optionPanel.SetActive(false);
+            optionPanel.transform.localScale = Vector3.zero;
+        }
 
         // オプションウィンドウのnullチェック
         if (optionPanel == null)
@@ -128,6 +132,7 @@ public class Title : MonoBehaviour
               .AppendInterval(1f)
               //開始は0.15秒ずつずらす
               .SetDelay(0.15f * i)
+              .SetLink(gameObject)
             );
         }
     }
@@ -144,7 +149,7 @@ public class Title : MonoBehaviour
         if (!isDefaultScaleoptionPanel)
         {
             // オプションウィンドウをだんだん拡大
-            optionPanel.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.2f);
+            optionPanel.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f).SetLink(gameObject);
             
             isDefaultScaleoptionPanel = true;
         }
@@ -167,7 +172,7 @@ public class Title : MonoBehaviour
         if (isDefaultScaleoptionPanel)
         {
             // オプションウィンドウをだんだん縮小
-            optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f);
+            optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f).SetLink(gameObject);
             
             isDefaultScaleoptionPanel = false;
         }
