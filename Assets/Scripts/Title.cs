@@ -132,6 +132,7 @@ public class Title : MonoBehaviour
               .AppendInterval(1f)
               //開始は0.15秒ずつずらす
               .SetDelay(0.15f * i)
+              .SetLink(gameObject)
             );
         }
     }
@@ -148,7 +149,7 @@ public class Title : MonoBehaviour
         if (!isDefaultScaleoptionPanel)
         {
             // オプションウィンドウをだんだん拡大
-            optionPanel.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.2f);
+            optionPanel.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f).SetLink(gameObject);
             
             isDefaultScaleoptionPanel = true;
         }
@@ -171,7 +172,7 @@ public class Title : MonoBehaviour
         if (isDefaultScaleoptionPanel)
         {
             // オプションウィンドウをだんだん縮小
-            optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f);
+            optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f).SetLink(gameObject);
             
             isDefaultScaleoptionPanel = false;
         }

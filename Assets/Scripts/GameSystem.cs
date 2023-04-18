@@ -450,6 +450,7 @@ public class GameSystem : MonoBehaviour
               .AppendInterval(1f)
               //開始は0.15秒ずつずらす
               .SetDelay(0.15f * i)
+              .SetLink(gameObject)
             );
         }
     }
