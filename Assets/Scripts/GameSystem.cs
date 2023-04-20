@@ -524,15 +524,19 @@ public class GameSystem : MonoBehaviour
 
         if (highScore < score)
         {
+           
             hiscore.gameObject.SetActive(true);
             hiscore.text = "New score";
+            hiscore.gameObject.GetComponent<HiScoreTextEffect>().HiScoreUiEffect();
         }
         else if (score > 10000)
         {
+            
             hiscore.gameObject.SetActive(true);
             hiscore.text = "high score";
-
+            hiscore.gameObject.GetComponent<HiScoreTextEffect>().HiScoreUiEffect();
         }
+        
 
     }
 }
