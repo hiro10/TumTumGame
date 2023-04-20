@@ -31,10 +31,10 @@ public class GameSystem : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText = default;
     [SerializeField] TextMeshProUGUI higtscoreText = default;
     [SerializeField] TextMeshProUGUI resultscoreText = default;
-    [SerializeField] GameObject hiscore = default;
+    [SerializeField] TextMeshProUGUI hiscore = default;
 
     [SerializeField] Texture[] tumTex;
-   
+
     // ポイント生成用プレハブ
     [SerializeField] GameObject pointEffectPrehab = default;
 
@@ -69,7 +69,7 @@ public class GameSystem : MonoBehaviour
     /// 開始処理
     /// </summary>
     private void Start()
-    {   
+    {
         StartCoroutine(StartGame());
     }
 
@@ -102,7 +102,7 @@ public class GameSystem : MonoBehaviour
         // リザルトパネルは表示しない
         resultPanel.SetActive(false);
 
-        hiscore.SetActive(false);
+        hiscore.gameObject.SetActive(false);
 
         // 4秒間待つ
         yield return new WaitForSeconds(4.0f);
@@ -172,7 +172,7 @@ public class GameSystem : MonoBehaviour
         }
         // 右クリックを押し込んだ時
         if (Input.GetMouseButtonDown(0))
-        { 
+        {
             OnDragin();
         }
         // 右クリックを離したとき
@@ -237,7 +237,7 @@ public class GameSystem : MonoBehaviour
             Ball ball = hit.collider.GetComponent<Ball>();
 
             // 同じ種類だったら
-            if (ball.id == currentDraggingBall.id&&ball.select==false)
+            if (ball.id == currentDraggingBall.id && ball.select == false)
             {
                 // 距離が近かったら
                 float distance = Vector2.Distance(ball.transform.position, currentDraggingBall.transform.position);
@@ -413,7 +413,7 @@ public class GameSystem : MonoBehaviour
         resultscoreText.text = score.ToString();
         if (highScore < score)
         {
-            hiscore.SetActive(true);
+
             highScore = score;
             PlayerPrefs.SetInt("SCORE", highScore);
             PlayerPrefs.Save();
@@ -425,6 +425,7 @@ public class GameSystem : MonoBehaviour
     /// </summary>
     public void ScoreUiEffect()
     {
+        ShowHiScoreText();
         //DOTweenTMPAnimatorを作成
         DOTweenTMPAnimator animator = new DOTweenTMPAnimator(resultscoreText);
 
@@ -506,7 +507,7 @@ public class GameSystem : MonoBehaviour
     {
         for (int i = 0; i < ballPrefab.Length; i++)
         {
-            if(ballPrefab[i] == null)
+            if (ballPrefab[i] == null)
             {
                 return;
             }
@@ -516,6 +517,23 @@ public class GameSystem : MonoBehaviour
             ballPrefab[i].transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             ballPrefab[i].GetComponent<Ball>().select = false;
         }
+    }
+
+    private void ShowHiScoreText()
+    {
+
+        if (highScore < score)
+        {
+            hiscore.gameObject.SetActive(true);
+            hiscore.text = "New score";
+        }
+        else if (score > 10000)
+        {
+            hiscore.gameObject.SetActive(true);
+            hiscore.text = "high score";
+
+        }
+
     }
 }
 

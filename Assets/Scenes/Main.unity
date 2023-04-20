@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2355,7 +2355,7 @@ MonoBehaviour:
   scoreText: {fileID: 797191684}
   higtscoreText: {fileID: 68964546}
   resultscoreText: {fileID: 615243024}
-  hiscore: {fileID: 777862550}
+  hiscore: {fileID: 777862552}
   tumTex:
   - {fileID: 2800000, guid: f5db6c82b84fc574a9b6bea9ff19647b, type: 3}
   - {fileID: 2800000, guid: d480e268830f184478183c4e75e8753d, type: 3}
