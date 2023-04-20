@@ -10,28 +10,16 @@ public class HiScoreTextEffect : MonoBehaviour
 {
     public TextMeshProUGUI hiscoreText = default;
     DOTweenTMPAnimator animator;
-    // Start is called before the first frame update
-    void Start()
-    {
-        //DOTweenTMPAnimatorを作成
-        animator = new DOTweenTMPAnimator(hiscoreText);
-        HiScoreUiEffect();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
+  
     public void HiScoreUiEffect()
     {
-
+        animator = new DOTweenTMPAnimator(hiscoreText);
         //1文字ずつアニメーションを設定(iが何番目の文字かのインデックス)
         //Sequenceで全文字のアニメーションをまとめる
         var sequence = DOTween.Sequence();
 
         sequence.SetLoops(-1);//無限ループ設定
-
+       
         //一文字ずつにアニメーション設定
         var duration = 0.2f;//1回辺りのTween時間
         for (int i = 0; i < animator.textInfo.characterCount; ++i)
