@@ -28,7 +28,7 @@ public class Title : MonoBehaviour
 
     // オプション画面用(DoTween)
     [SerializeField] private GameObject optionPanel;
-    private bool isDefaultScaleoptionPanel;
+  
 
     // タイトル用(DoTween)
     [SerializeField] private TextMeshProUGUI title;
@@ -48,8 +48,7 @@ public class Title : MonoBehaviour
         {
             StartMenu.SetActive(false);
         }
-        // dotweenの判定トリガーをfalseに
-        isDefaultScaleoptionPanel = false;
+      
 
         if (optionPanel != null)
         {
@@ -134,53 +133,6 @@ public class Title : MonoBehaviour
               .SetDelay(0.15f * i)
               .SetLink(gameObject)
             );
-        }
-    }
-
-    /// <summary>
-    /// オプションボタンの処理
-    /// </summary>
-    public void OnOppTionButton()
-    {
-        // 決定音の再生
-        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
-        optionPanel.SetActive(true);
-
-        if (!isDefaultScaleoptionPanel)
-        {
-            // オプションウィンドウをだんだん拡大
-            optionPanel.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f).SetLink(gameObject);
-            
-            isDefaultScaleoptionPanel = true;
-        }
-
-        // それ以外のボタンを押せないように
-        for (int i = 0; i < MenmuButton.Length; i++)
-        {
-            MenmuButton[i].interactable = false;
-        }
-    }
-
-    /// <summary>
-    /// オプション画面の閉じるボタンを押したとき
-    /// </summary>
-    public void OnCloseButton()
-    {
-        // 閉じる音の再生
-        SoundManager.instance.PlaySE(SoundManager.SE.Close);
-
-        if (isDefaultScaleoptionPanel)
-        {
-            // オプションウィンドウをだんだん縮小
-            optionPanel.transform.DOScale(new Vector3(0, 0, 0), 0.2f).SetLink(gameObject);
-            
-            isDefaultScaleoptionPanel = false;
-        }
-
-        // 押せなかったボタンを押せるように
-        for (int i = 0; i < MenmuButton.Length; i++)
-        {
-            MenmuButton[i].interactable = true;
         }
     }
 
