@@ -13,6 +13,7 @@ public class ButtonUiAnim :UIBehaviour,IPointerEnterHandler,IPointerExitHandler,
 
     protected override void Start()
     {
+        
         BaseScale = transform.localScale;
     }
     

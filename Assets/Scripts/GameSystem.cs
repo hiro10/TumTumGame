@@ -45,6 +45,9 @@ public class GameSystem : MonoBehaviour
     // リザルト画面格納
     [SerializeField] GameObject resultPanel;
 
+    // ポーズ画面格納
+    [SerializeField] GameObject pausePanel;
+
     [SerializeField] CameraShake cameraShake;
 
     // ゲームオーバー判定用
@@ -65,6 +68,21 @@ public class GameSystem : MonoBehaviour
     public float speed = 0.05f;
 
     [SerializeField] Countdown startCountDown;
+
+    bool isStop ;
+    float nowTime=0;
+
+    // オプション画面用(DoTween)
+    [SerializeField] private GameObject optionPanel;
+
+    private void Awake()
+    {
+        if (optionPanel != null)
+        {
+            optionPanel.SetActive(false);
+            optionPanel.transform.localScale = Vector3.zero;
+        }
+    }
     /// <summary>
     /// 開始処理
     /// </summary>
@@ -84,7 +102,7 @@ public class GameSystem : MonoBehaviour
         coundDownicon.fillAmount = 1f;
         // BGM止める
         SoundManager.instance.StopBgm();
-
+        isStop = false;
         // カウントダウン処理
         startCountDown.OnClickButtonStart();
 
@@ -101,6 +119,8 @@ public class GameSystem : MonoBehaviour
 
         // リザルトパネルは表示しない
         resultPanel.SetActive(false);
+        // ポーズ画面表示しない
+        pausePanel.SetActive(false);
 
         hiscore.gameObject.SetActive(false);
 
@@ -126,9 +146,18 @@ public class GameSystem : MonoBehaviour
         while (timeCount > 0)
         {
             yield return new WaitForSeconds(1);
-            timeCount--;
-            timerText.text = timeCount.ToString();
-            coundDownicon.fillAmount = (float)timeCount / (float)ParamsSO.Entity.timeCount;
+            
+            if (isStop != true)
+            {
+                nowTime = timeCount;
+                timeCount--;
+                timerText.text = timeCount.ToString();
+                coundDownicon.fillAmount = (float)timeCount / (float)ParamsSO.Entity.timeCount;
+            }
+        }
+        if(isStop==true)
+        {
+            timerText.text = nowTime.ToString();
         }
 
         gameOver = true;
@@ -197,7 +226,10 @@ public class GameSystem : MonoBehaviour
         // カメラからスクリーンに向かって飛ばす
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
+        if (isStop == true)
+        {
+            return;
+        }
         // ボールにヒットしたか
         if (hit && hit.collider.GetComponent<Ball>())
         {
@@ -536,8 +568,28 @@ public class GameSystem : MonoBehaviour
             hiscore.text = "high score";
             hiscore.gameObject.GetComponent<HiScoreTextEffect>().HiScoreUiEffect();
         }
-        
 
     }
+
+    public void PushPouseButton()
+    {
+        if (isStop == false)
+        {
+            SoundManager.instance.PlaySE(SoundManager.SE.Decision);
+            isStop = true;
+            pausePanel.SetActive(true);
+        }
+        else
+        {
+            SoundManager.instance.PlaySE(SoundManager.SE.Close);
+            isStop = false;
+            pausePanel.SetActive(false);
+        }
+    }
+
+
+   
+
+
 }
 
