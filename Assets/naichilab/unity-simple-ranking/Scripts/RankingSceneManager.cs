@@ -28,6 +28,7 @@ namespace naichilab
 
         private string _objectid = null;
 
+
         private string ObjectID
         {
             get { return _objectid ?? (_objectid = PlayerPrefs.GetString(BoardIdPlayerPrefsKey, null)); }
@@ -238,6 +239,13 @@ namespace naichilab
         {
             // 決定音の再生
             SoundManager.instance.PlaySE(SoundManager.SE.Close);
+            StartCoroutine(OnCcloseButton());
+            
+        }
+
+        IEnumerator OnCcloseButton()
+        {
+            yield return new WaitForSeconds(0.2f);
             closeButton.interactable = false;
             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("Ranking");
         }

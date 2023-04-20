@@ -81,7 +81,7 @@ public class GameSystem : MonoBehaviour
     {
         // 1秒間フェードアウト処理
         fade.FadeOut(1f);
-        
+        coundDownicon.fillAmount = 1f;
         // BGM止める
         SoundManager.instance.StopBgm();
 
