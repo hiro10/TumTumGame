@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 139130402}
   - component: {fileID: 139130401}
   - component: {fileID: 139130400}
+  - component: {fileID: 139130403}
   m_Layer: 5
   m_Name: 'TitleButton '
   m_TagString: Untagged
@@ -386,6 +387,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139130398}
   m_CullTransparentMesh: 0
+--- !u!114 &139130403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139130398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 127e5aab154b19740a6a27add66727d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rate: 1.25
 --- !u!1 &214309706
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,6 +1603,7 @@ GameObject:
   - component: {fileID: 857968052}
   - component: {fileID: 857968051}
   - component: {fileID: 857968050}
+  - component: {fileID: 857968053}
   m_Layer: 5
   m_Name: 'RankingButton '
   m_TagString: Untagged
@@ -1708,6 +1723,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 857968048}
   m_CullTransparentMesh: 0
+--- !u!114 &857968053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857968048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 127e5aab154b19740a6a27add66727d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rate: 1.25
 --- !u!1 &880498259
 GameObject:
   m_ObjectHideFlags: 0
@@ -2653,6 +2681,7 @@ GameObject:
   - component: {fileID: 1703013209}
   - component: {fileID: 1703013208}
   - component: {fileID: 1703013207}
+  - component: {fileID: 1703013210}
   m_Layer: 5
   m_Name: RetryButton
   m_TagString: Untagged
@@ -2772,6 +2801,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703013205}
   m_CullTransparentMesh: 0
+--- !u!114 &1703013210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703013205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 127e5aab154b19740a6a27add66727d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rate: 1.25
 --- !u!1 &1847799499
 GameObject:
   m_ObjectHideFlags: 0
