@@ -13,8 +13,10 @@ public class UntyAdsManager : MonoBehaviour
 #elif UNITY_ANDROID
     private string gameId = "5127515";
     public const string BannerId = "Banner_Android";
+#else
+    private string gameId = "99999";
+    public const string BannerId = "Banner_Android";
 #endif
-
     void Start()
     {
         // シングルトンに
@@ -41,4 +43,4 @@ public class UntyAdsManager : MonoBehaviour
     }
 }
 
-    
+

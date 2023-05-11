@@ -4,29 +4,37 @@ using UnityEngine;
 
 public class AspectKeeper : MonoBehaviour
 {
-    [SerializeField]
-    private Camera targetCamera; //対象とするカメラ
+    //対象とするカメラ
+    [SerializeField] private Camera targetCamera;
+    
+    //目的解像度
+    [SerializeField] private Vector2 aspectVec; 
 
-    [SerializeField]
-    private Vector2 aspectVec; //目的解像度
-
+    /// <summary>
+    /// 更新処理
+    /// </summary>
     void Update()
     {
-        var screenAspect = Screen.width / (float)Screen.height; //画面のアスペクト比
-        var targetAspect = aspectVec.x / aspectVec.y; //目的のアスペクト比
+        //画面のアスペクト比
+        var screenAspect = Screen.width / (float)Screen.height;
+        
+        //目的のアスペクト比
+        var targetAspect = aspectVec.x / aspectVec.y;
 
-        var magRate = targetAspect / screenAspect; //目的アスペクト比にするための倍率
+        //目的アスペクト比にするための倍率
+        var magRate = targetAspect / screenAspect;
 
-        var viewportRect = new Rect(0, 0, 1, 1); //Viewport初期値でRectを作成
+        //Viewport初期値でRectを作成
+        var viewportRect = new Rect(0, 0, 1, 1); 
 
         if (magRate < 1)
         {
-            viewportRect.width = magRate; //使用する横幅を変更
-            viewportRect.x = 0.5f - viewportRect.width * 0.5f;//中央寄せ
+            viewportRect.width = 1; //使用する横幅を変更
+           viewportRect.x = 0.5f - viewportRect.width * 0.5f;//中央寄せ
         }
         else
         {
-            viewportRect.height = 1 / magRate; //使用する縦幅を変更
+            viewportRect.height = 1; //使用する縦幅を変更
             viewportRect.y = 0.5f - viewportRect.height * 0.5f;//中央余生
         }
 

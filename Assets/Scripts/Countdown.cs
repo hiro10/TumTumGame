@@ -20,7 +20,16 @@ public class Countdown : MonoBehaviour
 
 	public void OnClickButtonStart()
 	{
-		StartCoroutine(CountdownCoroutine());
+		if(SoundManager.instance!=null)
+		{
+			StartCoroutine(CountdownCoroutine());
+
+		}
+		else
+        {
+			_textCountdown.gameObject.SetActive(false);
+			_imageMask.gameObject.SetActive(false);
+		}
 	}
 
 	IEnumerator CountdownCoroutine()

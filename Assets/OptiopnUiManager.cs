@@ -6,6 +6,8 @@ using DG.Tweening;
 public class OptiopnUiManager : MonoBehaviour
 {
     [SerializeField] GameObject optionBackPanel;
+
+  
     public void OnOptionButton()
     {
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
@@ -28,8 +30,10 @@ public class OptiopnUiManager : MonoBehaviour
 
     }
 
-    private void NonActive()
+    public void NonActive()
     {
-        this.gameObject.SetActive(false);
+        optionBackPanel.SetActive(false);
     }
+
+
 }

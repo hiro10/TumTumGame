@@ -53,7 +53,7 @@ public class GameSystem : MonoBehaviour
     // ゲームオーバー判定用
     bool gameOver;
 
-    [SerializeField] Image coundDownicon;
+    [SerializeField] Image countDownicon;
 
     DateTime awakeDateTime = DateTime.Now;
 
@@ -99,10 +99,15 @@ public class GameSystem : MonoBehaviour
     {
         // 1秒間フェードアウト処理
         fade.FadeOut(1f);
-        coundDownicon.fillAmount = 1f;
-        // BGM止める
-        SoundManager.instance.StopBgm();
+        countDownicon.fillAmount = 1f;
+        if (SoundManager.instance != null)
+        {
+            // BGM止める
+            SoundManager.instance.StopBgm();
+        }
+            
         isStop = false;
+        
         // カウントダウン処理
         startCountDown.OnClickButtonStart();
 
@@ -121,6 +126,7 @@ public class GameSystem : MonoBehaviour
         resultPanel.SetActive(false);
         // ポーズ画面表示しない
         pausePanel.SetActive(false);
+        
 
         hiscore.gameObject.SetActive(false);
 
@@ -152,15 +158,18 @@ public class GameSystem : MonoBehaviour
                 nowTime = timeCount;
                 timeCount--;
                 timerText.text = timeCount.ToString();
-                coundDownicon.fillAmount = (float)timeCount / (float)ParamsSO.Entity.timeCount;
+                countDownicon.fillAmount = (float)timeCount / (float)ParamsSO.Entity.timeCount;
             }
         }
         if(isStop==true)
         {
             timerText.text = nowTime.ToString();
+            
         }
 
         gameOver = true;
+
+        countDownicon.gameObject.SetActive(false);
 
         // ゲーム終了時に得点になるツムをつかんでいたら消して得点にする
         OnDragEnd();
@@ -587,8 +596,6 @@ public class GameSystem : MonoBehaviour
         }
     }
 
-
-   
 
 
 }
