@@ -8,6 +8,9 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject tutorial;
     [SerializeField] GameObject screenExplanation;
     [SerializeField] GameObject bomTutorial;
+    [SerializeField] GameObject gameRule;
+    [SerializeField] GameObject Panel;
+
     private void Awake()
     {
         InitTutorial();
@@ -17,6 +20,7 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     public void OnClickTutorialButton()
     {
+        Panel.SetActive(true);
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         tutorial.SetActive(true);
         // オプションウィンドウをだんだん拡大
@@ -26,7 +30,7 @@ public class TutorialManager : MonoBehaviour
     public void OnClickCloseButton()
     {
         SoundManager.instance.PlaySE(SoundManager.SE.Close);
-
+        Panel.SetActive(false);
         // オプションウィンドウをだんだん拡大
         tutorial.gameObject.transform.DOScale(new Vector3(0f, 0f, 0f), 0.2f).SetLink(gameObject).OnComplete(NonActiveTutorial);
         
@@ -34,6 +38,7 @@ public class TutorialManager : MonoBehaviour
 
     private void NonActiveTutorial()
     {
+        
         tutorial.SetActive(false);
     }
     /// <summary>
@@ -89,6 +94,34 @@ public class TutorialManager : MonoBehaviour
         tutorial.SetActive(true);
     }
 
+    /// <summary>
+    /// ゲームルール説明
+    /// </summary>
+    /// 
+    public void OnClickGameRuleButton()
+    {
+        SoundManager.instance.PlaySE(SoundManager.SE.Decision);
+        NonActiveTutorial();
+       
+        gameRule.SetActive(true);
+        // オプションウィンドウをだんだん拡大
+        gameRule.gameObject.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f).SetLink(gameObject);
+    }
+
+    public void OnClickGameRuleCloseButton()
+    {
+        SoundManager.instance.PlaySE(SoundManager.SE.Close);
+        // オプションウィンドウをだんだん拡大
+        gameRule.gameObject.transform.DOScale(new Vector3(0f, 0f, 0f), 0.2f).SetLink(gameObject).OnComplete(NonActiveGameRuleTutorial);
+
+    }
+    private void NonActiveGameRuleTutorial()
+    {
+        
+        gameRule.SetActive(false);
+        tutorial.SetActive(true);
+    }
+
 
     private void InitTutorial()
     {
@@ -98,5 +131,7 @@ public class TutorialManager : MonoBehaviour
         screenExplanation.SetActive(false);
         bomTutorial.transform.localScale = Vector3.zero;
         bomTutorial.SetActive(false);
+        gameRule.transform.localScale = Vector3.zero;
+        gameRule.SetActive(false);
     }
 }
