@@ -90,13 +90,4 @@ public class PageSwiper : MonoBehaviour
             scroll_pos += 0.5f;
         }
     }
-
-    public void GameRuleInit()
-    {
-        scroll_pos = 0;
-        LeftButton.SetActive(false);
-        RightButton.SetActive(true);
-        
-    }
-
 }
