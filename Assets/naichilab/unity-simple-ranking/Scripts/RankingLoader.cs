@@ -90,7 +90,7 @@ namespace naichilab
 
             CurrentRanking = board;
             LastScore = score;
-            SceneManager.LoadScene("Ranking", LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync("Ranking", LoadSceneMode.Additive);
         }
     }
 }

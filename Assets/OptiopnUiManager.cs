@@ -6,8 +6,13 @@ using DG.Tweening;
 public class OptiopnUiManager : MonoBehaviour
 {
     [SerializeField] GameObject optionBackPanel;
+    [SerializeField] GameObject backPanel;
 
-  
+    private void Awake()
+    {
+        backPanel.SetActive(false);
+    }
+
     public void OnOptionButton()
     {
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
@@ -17,7 +22,7 @@ public class OptiopnUiManager : MonoBehaviour
         // オプションウィンドウをだんだん拡大
         this.gameObject.transform.DOScale(new Vector3(1f, 1f, 1f), 0.2f).SetLink(gameObject);
         optionBackPanel.SetActive(true);
-
+        backPanel.SetActive(true);
     }
 
     public void OnOptionCloseButton()
@@ -33,6 +38,7 @@ public class OptiopnUiManager : MonoBehaviour
     public void NonActive()
     {
         optionBackPanel.SetActive(false);
+        backPanel.SetActive(false);
     }
 
 
