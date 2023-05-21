@@ -66,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Scroll_title:
-        m_Texture: {fileID: 2800000, guid: 05b577624dd26a047a455b8e41ff21cf, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5c4e7be0c3aaa114e980a40742fcb6f9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:

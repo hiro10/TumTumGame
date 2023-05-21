@@ -1093,7 +1093,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30B9\u30B3\u30A2"
+  m_text: "\u30E9\u30F3\u30AD\u30F3\u30B0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6729d79b7b5eee4fa0bcfa94d6afe2b, type: 2}
   m_sharedMaterial: {fileID: -8846432862654507543, guid: f6729d79b7b5eee4fa0bcfa94d6afe2b,
@@ -2106,7 +2106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2072855680864953843, guid: 2676ff5c94fc9f1489d59bf570d079e3,
+  m_Sprite: {fileID: 7011412487406338254, guid: 2676ff5c94fc9f1489d59bf570d079e3,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -2689,9 +2689,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ad0e4aa4c36049e4a92b715a86ecefa9, type: 3}
   audioSourceSE: {fileID: 1491756418}
   audioClipsSE:
-  - {fileID: 8300000, guid: b2fa09c76e0c543cfa8396563aa40ea2, type: 3}
+  - {fileID: 8300000, guid: fdee8d7be7ef5b14491ee98b1b9b104a, type: 3}
   - {fileID: 8300000, guid: 39ce96116a2a94f2a8bb055e54e65eb5, type: 3}
-  - {fileID: 8300000, guid: d5c21b15515c8f24185491f238111d04, type: 3}
+  - {fileID: 8300000, guid: 9971722c33c5e8441b982f0c6f8c778c, type: 3}
   - {fileID: 8300000, guid: e02467e9ff6bdb1449b360fc0edea74a, type: 3}
   - {fileID: 8300000, guid: 491e06a58c3d45b4fa4234b65a7473c7, type: 3}
   - {fileID: 8300000, guid: afdfb188c3b94a448bec800651c27714, type: 3}
@@ -6166,8 +6166,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
-    m_Bottom: -233
+    m_Top: 66
+    m_Bottom: -337
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -10268,7 +10268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7011412487406338254, guid: 2676ff5c94fc9f1489d59bf570d079e3,
+  m_Sprite: {fileID: 2072855680864953843, guid: 2676ff5c94fc9f1489d59bf570d079e3,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0

@@ -69,6 +69,8 @@ public class GameSystem : MonoBehaviour
 
     [SerializeField] Countdown startCountDown;
 
+    [SerializeField] GameObject pauseButton;
+
     bool isStop ;
     float nowTime=0;
 
@@ -126,8 +128,8 @@ public class GameSystem : MonoBehaviour
         resultPanel.SetActive(false);
         // ポーズ画面表示しない
         pausePanel.SetActive(false);
-        
 
+        pauseButton.SetActive(true);
         hiscore.gameObject.SetActive(false);
 
         // 4秒間待つ
@@ -180,6 +182,7 @@ public class GameSystem : MonoBehaviour
         // リザルト画面を表示
         resultPanel.SetActive(true);
 
+        pauseButton.SetActive(false);
         // 
         ScoreUiEffect();
     }
