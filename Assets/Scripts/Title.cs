@@ -24,7 +24,7 @@ public class Title : MonoBehaviour
     [SerializeField] GameObject StartMenu;
 
     // メニューボタン格納用
-    [SerializeField] Button[] MenmuButton = new Button[3];
+    [SerializeField] Button[] MenmuButton = new Button[4];
 
     // オプション画面用(DoTween)
     [SerializeField] private GameObject optionPanel;
