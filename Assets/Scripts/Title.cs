@@ -24,7 +24,7 @@ public class Title : MonoBehaviour
     [SerializeField] GameObject StartMenu;
 
     // メニューボタン格納用
-    [SerializeField] Button[] MenmuButton = new Button[3];
+    [SerializeField] Button[] MenmuButton = new Button[4];
 
     // オプション画面用(DoTween)
     [SerializeField] private GameObject optionPanel;
@@ -143,7 +143,7 @@ public class Title : MonoBehaviour
     {
         // 決定音の再生
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
-        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(100);
+        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(0);
     }
 
     /// <summary>

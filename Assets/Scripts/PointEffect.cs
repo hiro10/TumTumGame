@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
+
 
 public class PointEffect : MonoBehaviour
 {
     // スコアに応じて表示を変化
     // 上にあげる
 
-    [SerializeField] Text text;
+    [SerializeField] TextMeshProUGUI text;
     
     public void Show(int score)
     {
@@ -34,7 +35,7 @@ public class PointEffect : MonoBehaviour
             transform.Translate(0, 0.1f, 0);
         }
         // 上がり切ったら破棄
-        Destroy(gameObject, 0.2f);
+        Destroy(gameObject, 0.4f);
 
     }
 }

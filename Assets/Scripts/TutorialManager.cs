@@ -9,7 +9,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject screenExplanation;
     [SerializeField] GameObject bomTutorial;
     [SerializeField] GameObject gameRule;
-    [SerializeField] GameObject Panel;
+    //[SerializeField] GameObject Panel;
 
     private void Awake()
     {
@@ -20,7 +20,7 @@ public class TutorialManager : MonoBehaviour
     /// </summary>
     public void OnClickTutorialButton()
     {
-        Panel.SetActive(true);
+        //Panel.SetActive(true);
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
         tutorial.SetActive(true);
         // オプションウィンドウをだんだん拡大
@@ -30,7 +30,7 @@ public class TutorialManager : MonoBehaviour
     public void OnClickCloseButton()
     {
         SoundManager.instance.PlaySE(SoundManager.SE.Close);
-        Panel.SetActive(false);
+        //Panel.SetActive(false);
         // オプションウィンドウをだんだん拡大
         tutorial.gameObject.transform.DOScale(new Vector3(0f, 0f, 0f), 0.2f).SetLink(gameObject).OnComplete(NonActiveTutorial);
         

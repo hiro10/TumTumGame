@@ -24,7 +24,7 @@ public class BallGenerater : MonoBehaviour
     // ツムマテリアル格納用
     public Material ColorSet = default;
 
-
+    [SerializeField] GameObject stageHead;
     /// <summary>
     /// ツムの生成
     /// </summary>
@@ -36,7 +36,7 @@ public class BallGenerater : MonoBehaviour
             Vector2 pos = new Vector2(Random.Range(-0.1f, 0.1f), 2f);
             // 生成 Quaternion.identity= 回転の初期値
             GameObject ball = Instantiate(ballPrehab, pos, Quaternion.identity);
-
+            
             // 画像の設定
             // ボールの種類だけランダムに(ボムの時はidをー１)
             ballID = Random.Range(0, ballSprites.Length);
