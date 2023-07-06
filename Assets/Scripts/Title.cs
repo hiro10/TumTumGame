@@ -143,7 +143,7 @@ public class Title : MonoBehaviour
     {
         // 決定音の再生
         SoundManager.instance.PlaySE(SoundManager.SE.Decision);
-        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(100);
+        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(0);
     }
 
     /// <summary>
