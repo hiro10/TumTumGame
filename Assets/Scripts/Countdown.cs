@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
+//ゲームスタートまでのカウントダウン処理
 public class Countdown : MonoBehaviour
 {
 	[SerializeField]
@@ -29,7 +30,7 @@ public class Countdown : MonoBehaviour
 		cancellationTokenSource = new CancellationTokenSource();
 		if (SoundManager.instance!=null)
 		{
-			await CountDown(cancellationTokenSource.Token);
+			await GameStartCountDown(cancellationTokenSource.Token);
 		}
 		else
         {
@@ -38,7 +39,7 @@ public class Countdown : MonoBehaviour
 		}
 	}
 
-	private async UniTask CountDown(CancellationToken cancellationToken)
+	private async UniTask GameStartCountDown(CancellationToken cancellationToken)
 	{
 		for (int i = COUNTDOWN_MAX; i >= 0; i--)
 		{
