@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System;
 
-
+//ゲームスタートまでのカウントダウン処理
 public class Countdown : MonoBehaviour
 {
 	[SerializeField]
@@ -13,17 +16,21 @@ public class Countdown : MonoBehaviour
 	[SerializeField]
 	private Image _imageMask;
 
+	private CancellationTokenSource cancellationTokenSource;
+
+	const int COUNTDOWN_MAX = 3;
+
 	void Start()
 	{
 		_textCountdown.text = "";
 	}
 
-	public void OnClickButtonStart()
+    async public void OnClickButtonStart()
 	{
-		if(SoundManager.instance!=null)
+		cancellationTokenSource = new CancellationTokenSource();
+		if (SoundManager.instance!=null)
 		{
-			StartCoroutine(CountdownCoroutine());
-
+			await GameStartCountDown(cancellationTokenSource.Token);
 		}
 		else
         {
@@ -32,25 +39,32 @@ public class Countdown : MonoBehaviour
 		}
 	}
 
-	IEnumerator CountdownCoroutine()
+	private async UniTask GameStartCountDown(CancellationToken cancellationToken)
 	{
-		_imageMask.gameObject.SetActive(true);
-		_textCountdown.gameObject.SetActive(true);
-		yield return new WaitForSeconds(1.0f);
-		SoundManager.instance.PlaySE(SoundManager.SE.CountDownSe);
-		_textCountdown.text = "3";
-		yield return new WaitForSeconds(1.0f);
-		SoundManager.instance.PlaySE(SoundManager.SE.CountDownSe);
-		_textCountdown.text = "2";
-		yield return new WaitForSeconds(1.0f);
-		SoundManager.instance.PlaySE(SoundManager.SE.CountDownSe);
-		_textCountdown.text = "1";
-		yield return new WaitForSeconds(1.0f);
-		SoundManager.instance.PlaySE(SoundManager.SE.CountZero);
-		_textCountdown.text = "GO!";
-		yield return new WaitForSeconds(1.0f);
+		for (int i = COUNTDOWN_MAX; i >= 0; i--)
+		{
+			_imageMask.gameObject.SetActive(true);
+			_textCountdown.gameObject.SetActive(true);
+			if (i == 0)
+			{
+				await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: cancellationToken);
+				SoundManager.instance.PlaySE(SoundManager.SE.CountZero);
+				_textCountdown.text = "GO!";
+				await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: cancellationToken);
+				Destroy(this);
+				cancellationToken.ThrowIfCancellationRequested();
+			}
+			else
+			{
+				await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: cancellationToken);
+				SoundManager.instance.PlaySE(SoundManager.SE.CountDownSe);
+				_textCountdown.text = i.ToString();
+			}
+		}
+	}
 
-		_textCountdown.text = "";
+    private void OnDestroy()
+    {
 		_textCountdown.gameObject.SetActive(false);
 		_imageMask.gameObject.SetActive(false);
 	}

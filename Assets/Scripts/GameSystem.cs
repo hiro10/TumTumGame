@@ -7,6 +7,9 @@ using TMPro;
 using DG.Tweening;
 using System;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+
 
 // ゲームを管理
 public class GameSystem : MonoBehaviour
@@ -88,16 +91,16 @@ public class GameSystem : MonoBehaviour
     /// <summary>
     /// 開始処理
     /// </summary>
-    private void Start()
+   async private void Start()
     {
-        StartCoroutine(StartGame());
+        await StartGame();
     }
 
     /// <summary>
     /// 開始処理
     /// </summary>
     /// <returns></returns>
-    IEnumerator StartGame()
+    async private UniTask StartGame()
     {
         // 1秒間フェードアウト処理
         fade.FadeOut(1f);
@@ -133,7 +136,7 @@ public class GameSystem : MonoBehaviour
         hiscore.gameObject.SetActive(false);
 
         // 4秒間待つ
-        yield return new WaitForSeconds(4.0f);
+        await UniTask.Delay(TimeSpan.FromSeconds(4));
 
         // メインBGMを流す
         SoundManager.instance.PlayBGM(SoundManager.BGM.Main);
@@ -142,18 +145,18 @@ public class GameSystem : MonoBehaviour
         StartCoroutine(ballGenerater.Spown(ParamsSO.Entity.initBallCount));
 
         // 制限時間
-        StartCoroutine(CountDown());
+        await GameTimeCountDown();
     }
 
     /// <summary>
     /// 制限時間処理
     /// </summary>
-    IEnumerator CountDown()
+    async private UniTask GameTimeCountDown()
     {
         // 制限時間以内なら
         while (timeCount > 0)
         {
-            yield return new WaitForSeconds(1);
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
             
             if (isStop != true)
             {
@@ -231,7 +234,7 @@ public class GameSystem : MonoBehaviour
     /// <summary>
     /// ドラッグをしたとき
     /// </summary>
-    void OnDragin()
+    async void OnDragin()
     {
         // オブジェクトのヒット確認
         // Rayで判定
@@ -250,7 +253,7 @@ public class GameSystem : MonoBehaviour
             if (ball.isBomb())
             {
                 Explosion(ball);
-                StartCoroutine(CameraShake());
+                await CameraShake();
             }
             else
             {
@@ -441,12 +444,12 @@ public class GameSystem : MonoBehaviour
     /// カメラを揺らす
     /// </summary>
     /// <returns></returns>
-    public IEnumerator CameraShake()
+    async public UniTask CameraShake()
     {
         // カメラを揺らす
         cameraShake.Shake(0.25f, 0.5f);
 
-        yield return new WaitForSeconds(2.0f);
+        await UniTask.Delay(TimeSpan.FromSeconds(2));
     }
 
     /// <summary>
